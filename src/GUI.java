@@ -9,12 +9,15 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class GUI {
 
@@ -26,16 +29,23 @@ public class GUI {
 	private JMenu menu;
 	private JPanel boardPanel;
 
-	private JButton[][] boardButtons; // the slots in the game
-	private BoardListener[][] boardListener; // slot button listeners
+	private JButton[][] boardButtons; 
+	private BoardListener[][] boardListener; 
 
 	private Icon openSlot = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Open.GIF");
-	private Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); // slot
-	private Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF"); // slot
+	private Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); 
+	private Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF");
 
+	private JTextField[] username;
 	int turn = 0;
+	
+	JComboBox difficultyDropDown;
+	JComboBox playerDropDown;
 
 	public GUI(int rows, int colums) {
+		username = new JTextField[2];
+		username[0] = new JTextField(10);
+        username[1] = new JTextField(10);
 		this.rows = rows;
 		this.colums = colums;
 		gameFrame = new JFrame("Connect4");
@@ -45,6 +55,7 @@ public class GUI {
 		gameFrame.setSize(500, 500);
 		gameFrame.setVisible(true);
 		gameFrame.setEnabled(true);
+		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	/**
@@ -104,6 +115,44 @@ public class GUI {
 		menuBar.add(menu);
 		gameFrame.setJMenuBar(menuBar);
 	}
+	
+	private JPanel getPanel()
+    {
+        JPanel basePanel = new JPanel();
+        //basePanel.setLayout(new BorderLayout(5, 5));
+        basePanel.setOpaque(true);
+        
+        String[] playerOptions = { "1", "2" };
+        playerDropDown = new JComboBox(playerOptions);
+        String[] difficultyOptions = { "Easy", "Medium", "Hard" };
+        difficultyDropDown = new JComboBox(difficultyOptions);
+        
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(4, 2, 5, 5));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        centerPanel.setOpaque(true);
+        
+        JLabel numberOfPlayers = new JLabel("Enter the number of players: ");
+        JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
+        JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
+        JLabel diffculty = new JLabel("Enter Dificulty: ");
+        
+        
+        centerPanel.add(numberOfPlayers);
+        centerPanel.add(playerDropDown);
+        centerPanel.add(usernamePlayer1);
+        centerPanel.add(username[0]);
+        centerPanel.add(usernamePlayer2);
+        centerPanel.add(username[1]);
+        centerPanel.add(diffculty);
+        centerPanel.add(difficultyDropDown);
+        
+        
+        basePanel.add(centerPanel);
+		
+        return basePanel;
+    }
+
 
 	/**
 	 *  Board Buttons Listener
@@ -161,9 +210,21 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			String optionSelected = e.getActionCommand(); // get which option in the menu was clicked
 			if(optionSelected.equals("New Game")){  // remove current board and generate a new one
-				gameFrame.remove(boardPanel);
-				generateBoard();
-				gameFrame.revalidate();
+				int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Settings : ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				if(selection == JOptionPane.OK_OPTION){
+					//Test///////////////////////////////////////////////////
+					System.out.println(playerDropDown.getSelectedItem());
+					System.out.println(username[0].getText());
+					System.out.println(username[1].getText());
+					System.out.println(difficultyDropDown.getSelectedItem());
+					/////////////////////////////////////////////////////////
+					gameFrame.remove(boardPanel);
+					generateBoard();
+					gameFrame.revalidate();
+				}
+				else if(selection == JOptionPane.CANCEL_OPTION){
+					System.out.println("Canceled"); //test
+				}	
 			}
 			else if(optionSelected.equals("Quit")){  // close the game
 				gameFrame.dispose();
