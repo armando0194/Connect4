@@ -29,9 +29,9 @@ public class GUI {
 	private JButton[][] boardButtons; // the slots in the game
 	private BoardListener[][] boardListener; // slot button listeners
 
-	private Icon openSlot = new ImageIcon("C:\\Users\\Armando\\workspace\\Connect4Example\\src\\images\\Open.GIF");
-	private Icon redChip = new ImageIcon("C:\\Users\\Armando\\workspace\\Connect4Example\\src\\images\\Red.GIF"); // slot
-	private Icon blackChip = new ImageIcon("C:\\Users\\Armando\\workspace\\Connect4Example\\src\\images\\Black.GIF"); // slot
+	private Icon openSlot = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Open.GIF");
+	private Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); // slot
+	private Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF"); // slot
 
 	int turn = 0;
 
