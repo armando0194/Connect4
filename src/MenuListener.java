@@ -20,7 +20,6 @@ class MenuListener implements ActionListener{
 	private JTextField[] username;
 	private JComboBox<String> difficultyDropDown;
 	private JComboBox<String> playerDropDown;
-	private JPanel baordPanel;
 
 	public MenuListener(JFrame gameFrame, JPanel baordPanel) {
 		this.gameFrame = gameFrame;
@@ -41,7 +40,7 @@ class MenuListener implements ActionListener{
 				System.out.println(username[1].getText());
 				System.out.println(difficultyDropDown.getSelectedItem());
 				/////////////////////////////////////////////////////////
-				gameFrame.remove(gameFrame.);
+				gameFrame.remove(GUI.getPanelBaord());
 				GUI.generateBoard();
 				gameFrame.revalidate();
 			}
@@ -90,5 +89,4 @@ class MenuListener implements ActionListener{
 		
         return basePanel;
     }
-
 }

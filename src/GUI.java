@@ -20,22 +20,22 @@ import javax.swing.JTextField;
 
 public class GUI {
 
-	private int rows = 6;
-	private int colums = 7;
+	private static int rows = 6;
+	private static int colums = 7;
 
-	private JFrame gameFrame;
-	private JMenuBar menuBar;
-	private JMenu menu;
-	private JPanel boardPanel;
+	private static JFrame gameFrame;
+	private static JMenuBar menuBar;
+	private static JMenu menu;
+	private static JPanel boardPanel;
 
-	private JButton[][] boardButtons; 
-	private BoardListener[][] boardListener; 
+	private static JButton[][] boardButtons; 
+	private static BoardListener[][] boardListener; 
 
-	private Icon openSlot = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Open.GIF");
-	private Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); 
-	private Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF");
-
-	private int turn = 0;
+	private static Icon openSlot = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Open.GIF");
+	private static Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); 
+	private static Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF");
+	
+	private static int turn = 0;
 	
 	public GUI(int rows, int colums) {
 		
@@ -56,11 +56,42 @@ public class GUI {
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameFrame.setLocationRelativeTo(null);
 	}
+	
+	public static JPanel getPanelBaord(){
+		return boardPanel;
+	}
 
+	public static JButton getBoardButton(int i, int j){
+		return boardButtons[i][j];
+	}
+	
+	public static Icon getRedChip(){
+		return redChip;
+	}
+	
+	public static Icon getYellowChip(){
+		return blackChip;
+	}
+	
+	public static int getRows(){
+		return rows;
+	}
+	
+	public static int getColumns(){
+		return colums;
+	}
+	
+	public static int getTurn(){
+		return turn;
+	}
+	
+	public static void setTurn(int newTurn){
+		turn = newTurn; 
+	}
 	/**
 	 * Initiate the board
 	 */
-	public void generateBoard() {
+	public static void generateBoard() {
 		
 		boardListener = new BoardListener[rows][colums];
 		boardButtons = new JButton[rows][colums]; 
@@ -69,7 +100,7 @@ public class GUI {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < colums; j++) {
 				boardButtons[i][j] = new JButton(openSlot);
-				//boardListener[i][j] = new BoardListener(i, j);
+				boardListener[i][j] = new BoardListener(i, j);
 				boardButtons[i][j].addActionListener(boardListener[i][j]); 
 				boardButtons[i][j].setBackground(Color.WHITE); 
 				boardPanel.add(boardButtons[i][j]);
@@ -93,7 +124,7 @@ public class GUI {
 	/**
 	 * Generates a menu at the top left of the window
 	 */
-	public void generateMenu() {
+	public static void generateMenu() {
 		// initiate the menu
 		menuBar = new JMenuBar();
 		menu = new JMenu("Game");
@@ -104,7 +135,7 @@ public class GUI {
 		
 		// Add listener for the options
 		MenuListener newGameListener = new MenuListener(gameFrame, boardPanel); 
-		MenuListener quitListener = new MenuListener(gameFrame); 
+		MenuListener quitListener = new MenuListener(gameFrame, boardPanel); 
 		newGameItem.addActionListener(newGameListener);
 		quitGameItem.addActionListener(quitListener);
 		
@@ -113,53 +144,5 @@ public class GUI {
 		menu.add(quitGameItem);
 		menuBar.add(menu);
 		gameFrame.setJMenuBar(menuBar);
-	}
-
-	/**
-	 *  Board Buttons Listener
-	 */
-	class BoardListener implements ActionListener {
-		private int clickedRow; // slot button row
-		private int clickedCol; // slot button column 
-
-		/**
-		 * Constructor 
-		 */
-		public BoardListener(int clickedRow, int clickedCol) {
-			this.clickedRow = clickedRow;
-			this.clickedCol = clickedCol;
-		} 
-
-		/**
-		 * This method is invoked when an enabled slot is clicked. It disables the clicked slot and enables the slot above it unless it is the last row
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-			int lastRow = 0;
-
-			boardButtons[clickedRow][clickedCol].setEnabled(false); // Disable the slot clicked
-			if (clickedRow > lastRow) {                            
-				boardButtons[clickedRow - 1][clickedCol].setEnabled(true); // enables the slot above the clicked one
-			}
-
-			// Basic logic to change turns. Needed to make the prototype work - Temporary
-			turn = (turn == 1) ? 0 : 1;
-
-			// changes the color of the chip every turn
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < colums; j++) {
-					if (boardButtons[i][j].isEnabled()) {
-						if (turn == 1) {
-							boardButtons[i][j].setDisabledIcon(redChip);
-							boardButtons[i][j].setRolloverIcon(redChip);
-						} // end if
-						else {
-							boardButtons[i][j].setDisabledIcon(blackChip);
-							boardButtons[i][j].setRolloverIcon(blackChip);
-						}
-					}
-				}
-			}
-		}
 	}
 }
