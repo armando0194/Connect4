@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +20,7 @@ import javax.swing.JTextField;
 
 public class GUI {
 
-	private int rows = 7;
+	private int rows = 6;
 	private int colums = 7;
 
 	private JFrame gameFrame;
@@ -36,32 +35,32 @@ public class GUI {
 	private Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); 
 	private Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF");
 
-	private JTextField[] username;
-	int turn = 0;
+	private int turn = 0;
 	
-	JComboBox difficultyDropDown;
-	JComboBox playerDropDown;
-
 	public GUI(int rows, int colums) {
-		username = new JTextField[2];
-		username[0] = new JTextField(10);
-        username[1] = new JTextField(10);
+		
+		//initiate Values
 		this.rows = rows;
 		this.colums = colums;
-		gameFrame = new JFrame("Connect4");
+		
+        //Generate Frame and components
+        gameFrame = new JFrame("Connect4");
 		gameFrame.setLayout(new BorderLayout());
 		generateMenu();
 		generateBoard();
+		
+		//Frame Settings
 		gameFrame.setSize(500, 500);
 		gameFrame.setVisible(true);
 		gameFrame.setEnabled(true);
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gameFrame.setLocationRelativeTo(null);
 	}
 
 	/**
 	 * Initiate the board
 	 */
-	private void generateBoard() {
+	public void generateBoard() {
 		
 		boardListener = new BoardListener[rows][colums];
 		boardButtons = new JButton[rows][colums]; 
@@ -70,7 +69,7 @@ public class GUI {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < colums; j++) {
 				boardButtons[i][j] = new JButton(openSlot);
-				boardListener[i][j] = new BoardListener(i, j);
+				//boardListener[i][j] = new BoardListener(i, j);
 				boardButtons[i][j].addActionListener(boardListener[i][j]); 
 				boardButtons[i][j].setBackground(Color.WHITE); 
 				boardPanel.add(boardButtons[i][j]);
@@ -104,8 +103,8 @@ public class GUI {
 		JMenuItem quitGameItem = new JMenuItem("Quit");
 		
 		// Add listener for the options
-		MenuListener newGameListener = new MenuListener(); 
-		MenuListener quitListener = new MenuListener(); 
+		MenuListener newGameListener = new MenuListener(gameFrame, boardPanel); 
+		MenuListener quitListener = new MenuListener(gameFrame); 
 		newGameItem.addActionListener(newGameListener);
 		quitGameItem.addActionListener(quitListener);
 		
@@ -115,44 +114,6 @@ public class GUI {
 		menuBar.add(menu);
 		gameFrame.setJMenuBar(menuBar);
 	}
-	
-	private JPanel getPanel()
-    {
-        JPanel basePanel = new JPanel();
-        //basePanel.setLayout(new BorderLayout(5, 5));
-        basePanel.setOpaque(true);
-        
-        String[] playerOptions = { "1", "2" };
-        playerDropDown = new JComboBox(playerOptions);
-        String[] difficultyOptions = { "Easy", "Medium", "Hard" };
-        difficultyDropDown = new JComboBox(difficultyOptions);
-        
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(4, 2, 5, 5));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        centerPanel.setOpaque(true);
-        
-        JLabel numberOfPlayers = new JLabel("Enter the number of players: ");
-        JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
-        JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
-        JLabel diffculty = new JLabel("Enter Dificulty: ");
-        
-        
-        centerPanel.add(numberOfPlayers);
-        centerPanel.add(playerDropDown);
-        centerPanel.add(usernamePlayer1);
-        centerPanel.add(username[0]);
-        centerPanel.add(usernamePlayer2);
-        centerPanel.add(username[1]);
-        centerPanel.add(diffculty);
-        centerPanel.add(difficultyDropDown);
-        
-        
-        basePanel.add(centerPanel);
-		
-        return basePanel;
-    }
-
 
 	/**
 	 *  Board Buttons Listener
@@ -200,37 +161,5 @@ public class GUI {
 				}
 			}
 		}
-	}
-	
-	/**
-	 *  Menu Buttons Listener
-	 */
-	class MenuListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String optionSelected = e.getActionCommand(); // get which option in the menu was clicked
-			if(optionSelected.equals("New Game")){  // remove current board and generate a new one
-				int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Settings : ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-				if(selection == JOptionPane.OK_OPTION){
-					//Test///////////////////////////////////////////////////
-					System.out.println(playerDropDown.getSelectedItem());
-					System.out.println(username[0].getText());
-					System.out.println(username[1].getText());
-					System.out.println(difficultyDropDown.getSelectedItem());
-					/////////////////////////////////////////////////////////
-					gameFrame.remove(boardPanel);
-					generateBoard();
-					gameFrame.revalidate();
-				}
-				else if(selection == JOptionPane.CANCEL_OPTION){
-					System.out.println("Canceled"); //test
-				}	
-			}
-			else if(optionSelected.equals("Quit")){  // close the game
-				gameFrame.dispose();
-			}
-			
-		}
-		
 	}
 }
