@@ -31,9 +31,9 @@ public class GUI {
 	private static JButton[][] boardButtons; 
 	private static BoardListener[][] boardListener; 
 
-	private static Icon openSlot = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Open.GIF");
-	private static Icon redChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Red.GIF"); 
-	private static Icon blackChip = new ImageIcon("C:\\Users\\Armando\\Desktop\\Connect4\\src\\Black.GIF");
+	private static Icon openSlot = new ImageIcon("src\\empty.png");
+	private static Icon redChip = new ImageIcon("src\\Red.png"); 
+	private static Icon yellowChip = new ImageIcon("src\\Yellow.png");
 	
 	private static int turn = 0;
 	
@@ -50,10 +50,12 @@ public class GUI {
 		generateBoard();
 		
 		//Frame Settings
-		gameFrame.setSize(500, 500);
+		gameFrame.setSize(440,440);
 		gameFrame.setVisible(true);
 		gameFrame.setEnabled(true);
+		gameFrame.setResizable(false);
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gameFrame.setBackground(Color.BLUE);
 		gameFrame.setLocationRelativeTo(null);
 	}
 	
@@ -70,7 +72,7 @@ public class GUI {
 	}
 	
 	public static Icon getYellowChip(){
-		return blackChip;
+		return yellowChip;
 	}
 	
 	public static int getRows(){
@@ -102,7 +104,8 @@ public class GUI {
 				boardButtons[i][j] = new JButton(openSlot);
 				boardListener[i][j] = new BoardListener(i, j);
 				boardButtons[i][j].addActionListener(boardListener[i][j]); 
-				boardButtons[i][j].setBackground(Color.WHITE); 
+				boardButtons[i][j].setBackground(Color.BLUE); 
+				boardButtons[i][j].setBorderPainted(false);//Removes weird white lines
 				boardPanel.add(boardButtons[i][j]);
 				
 				//disable all the rows but the first one
@@ -112,12 +115,12 @@ public class GUI {
 				} 
 				// black chip goes first
 				else {
-					boardButtons[i][j].setDisabledIcon(blackChip); 
+					boardButtons[i][j].setDisabledIcon(yellowChip); 
 				}
 			}
 		}
 
-		boardPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+		boardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
 		gameFrame.add(boardPanel, BorderLayout.CENTER);
 	}
 
