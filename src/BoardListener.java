@@ -37,8 +37,7 @@ class BoardListener implements ActionListener {
 		if (clickedRow > lastRow) {                            
 			boardButton[clickedRow - 1][clickedCol].setEnabled(true); // enables the slot above the clicked one
 		}
-		
-		//System.out.println("turn " + GUI.getTurn());
+
 		// Basic logic to change turns. Needed to make the prototype work - Temporary
 		turn = (turn== 1) ? 0 : 1;
 

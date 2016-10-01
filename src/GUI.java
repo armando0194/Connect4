@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 
 public class GUI {
 
-	private int rows = 6;
-	private int colums = 7;
+	private int rows;
+	private int colums;
 
 	private JFrame gameFrame;
 	private JMenuBar menuBar;

@@ -13,9 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- *  Menu Buttons Listener
- */
 class MenuListener implements ActionListener{
 	
 	private JFrame gameFrame;
@@ -63,15 +60,20 @@ class MenuListener implements ActionListener{
 		}
 	}	
 	
+	/**
+	 * Creates a JPanel that will be display inside an JOptionPanel
+	 */
 	private JPanel getPanel()
     {
         JPanel basePanel = new JPanel();
+        String[] difficultyOptions = { "Easy", "Medium", "Hard" };
+        String[] playerOptions = { "1", "2" };
+        
         basePanel.setLayout(new BorderLayout(5, 5));
         basePanel.setOpaque(true);
         
-        String[] playerOptions = { "1", "2" };
+        //Create dropdowns
         playerDropDown = new JComboBox<String>(playerOptions);
-        String[] difficultyOptions = { "Easy", "Medium", "Hard" };
         difficultyDropDown = new JComboBox<String>(difficultyOptions);
         
         JPanel centerPanel = new JPanel();
@@ -79,12 +81,13 @@ class MenuListener implements ActionListener{
         centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         centerPanel.setOpaque(true);
         
+        //Input Labels
         JLabel numberOfPlayers = new JLabel("Enter the number of players: ");
         JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
         JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
         JLabel diffculty = new JLabel("Enter Dificulty: ");
-        
-        
+               
+        //Inputs (dropdowns and textarea)
         centerPanel.add(numberOfPlayers);
         centerPanel.add(playerDropDown);
         centerPanel.add(usernamePlayer1);
@@ -99,6 +102,9 @@ class MenuListener implements ActionListener{
         return basePanel;
     }
 	
+	/**
+	 * Cleans the board so players can start a new game
+	 */
 	public void cleanBoard(){
 		for (int i = 0; i < boardButton.length; i++) {
 			for (int j = 0; j < boardButton[i].length; j++) {
