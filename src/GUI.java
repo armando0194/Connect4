@@ -26,9 +26,9 @@ public class GUI {
 	private JButton[][] boardButtons; 
 	private BoardListener[][] boardListener; 
 
-	private Icon openSlot = new ImageIcon("src\\empty.png");
-	private Icon redChip = new ImageIcon("src\\Red.png"); 
-	private Icon yellowChip = new ImageIcon("src\\Yellow.png");
+	private Icon openSlot = new ImageIcon("src\\images\\empty.png");
+	private Icon redChip = new ImageIcon("src\\images\\Red.png"); 
+	private Icon yellowChip = new ImageIcon("src\\images\\Yellow.png");
 	
 	public GUI(int rows, int colums) {
 		
@@ -76,7 +76,7 @@ public class GUI {
 					boardButtons[i][j].setDisabledIcon(openSlot); 
 					boardButtons[i][j].setEnabled(false); 
 				} 
-				// black chip goes first
+				// yellow chip goes first
 				else {
 					boardButtons[i][j].setDisabledIcon(yellowChip); 
 				}
@@ -100,7 +100,7 @@ public class GUI {
 		JMenuItem quitGameItem = new JMenuItem("Quit");
 		
 		// Add listener for the options
-		MenuListener newGameListener = new MenuListener(gameFrame, boardButtons, openSlot); 
+		MenuListener newGameListener = new MenuListener(gameFrame, boardButtons, openSlot, yellowChip); 
 		MenuListener quitListener = new MenuListener(gameFrame); 
 		newGameItem.addActionListener(newGameListener);
 		quitGameItem.addActionListener(quitListener);

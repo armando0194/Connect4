@@ -18,14 +18,16 @@ class MenuListener implements ActionListener{
 	private JFrame gameFrame;
 	private JTextField[] username;
 	private Icon empty;
+	private Icon yellowChip;
 	private JButton[][] boardButton;
 	private JComboBox<String> difficultyDropDown;
 	private JComboBox<String> playerDropDown;
 
-	public MenuListener(JFrame gameFrame, JButton[][] boardButton, Icon empty) {
+	public MenuListener(JFrame gameFrame, JButton[][] boardButton, Icon empty, Icon yellowChip) {
 		this.gameFrame = gameFrame;
 		this.boardButton = boardButton;
 		this.empty = empty;
+		this.yellowChip = yellowChip;
 		username = new JTextField[2];
 		username[0] = new JTextField(10);
         username[1] = new JTextField(10);
@@ -115,6 +117,7 @@ class MenuListener implements ActionListener{
 					boardButton[i][j].setEnabled(false); 
 				} 
 				else{
+					boardButton[i][j].setDisabledIcon(yellowChip);
 					boardButton[i][j].setEnabled(true); 
 				}
 			}
