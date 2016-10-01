@@ -1,41 +1,34 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class GUI {
 
-	private static int rows = 6;
-	private static int colums = 7;
+	private int rows = 6;
+	private int colums = 7;
 
-	private static JFrame gameFrame;
-	private static JMenuBar menuBar;
-	private static JMenu menu;
-	private static JPanel boardPanel;
+	private JFrame gameFrame;
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JPanel boardPanel;
 
-	private static JButton[][] boardButtons; 
-	private static BoardListener[][] boardListener; 
+	private JButton[][] boardButtons; 
+	private BoardListener[][] boardListener; 
 
-	private static Icon openSlot = new ImageIcon("src\\empty.png");
-	private static Icon redChip = new ImageIcon("src\\Red.png"); 
-	private static Icon yellowChip = new ImageIcon("src\\Yellow.png");
-	
-	private static int turn = 0;
+	private Icon openSlot = new ImageIcon("src\\empty.png");
+	private Icon redChip = new ImageIcon("src\\Red.png"); 
+	private Icon yellowChip = new ImageIcon("src\\Yellow.png");
 	
 	public GUI(int rows, int colums) {
 		
@@ -46,8 +39,9 @@ public class GUI {
         //Generate Frame and components
         gameFrame = new JFrame("Connect4");
 		gameFrame.setLayout(new BorderLayout());
-		generateMenu();
+		
 		generateBoard();
+		generateMenu();
 		
 		//Frame Settings
 		gameFrame.setSize(440,440);
@@ -59,41 +53,10 @@ public class GUI {
 		gameFrame.setLocationRelativeTo(null);
 	}
 	
-	public static JPanel getPanelBaord(){
-		return boardPanel;
-	}
-
-	public static JButton getBoardButton(int i, int j){
-		return boardButtons[i][j];
-	}
-	
-	public static Icon getRedChip(){
-		return redChip;
-	}
-	
-	public static Icon getYellowChip(){
-		return yellowChip;
-	}
-	
-	public static int getRows(){
-		return rows;
-	}
-	
-	public static int getColumns(){
-		return colums;
-	}
-	
-	public static int getTurn(){
-		return turn;
-	}
-	
-	public static void setTurn(int newTurn){
-		turn = newTurn; 
-	}
 	/**
 	 * Initiate the board
 	 */
-	public static void generateBoard() {
+	public void generateBoard() {
 		
 		boardListener = new BoardListener[rows][colums];
 		boardButtons = new JButton[rows][colums]; 
@@ -102,7 +65,7 @@ public class GUI {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < colums; j++) {
 				boardButtons[i][j] = new JButton(openSlot);
-				boardListener[i][j] = new BoardListener(i, j);
+				boardListener[i][j] = new BoardListener(i, j, boardButtons, redChip, yellowChip);
 				boardButtons[i][j].addActionListener(boardListener[i][j]); 
 				boardButtons[i][j].setBackground(Color.BLUE); 
 				boardButtons[i][j].setBorderPainted(false);//Removes weird white lines
@@ -127,7 +90,7 @@ public class GUI {
 	/**
 	 * Generates a menu at the top left of the window
 	 */
-	public static void generateMenu() {
+	public void generateMenu() {
 		// initiate the menu
 		menuBar = new JMenuBar();
 		menu = new JMenu("Game");
@@ -137,8 +100,8 @@ public class GUI {
 		JMenuItem quitGameItem = new JMenuItem("Quit");
 		
 		// Add listener for the options
-		MenuListener newGameListener = new MenuListener(gameFrame, boardPanel); 
-		MenuListener quitListener = new MenuListener(gameFrame, boardPanel); 
+		MenuListener newGameListener = new MenuListener(gameFrame, boardButtons, openSlot); 
+		MenuListener quitListener = new MenuListener(gameFrame); 
 		newGameItem.addActionListener(newGameListener);
 		quitGameItem.addActionListener(quitListener);
 		

@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,14 +20,22 @@ class MenuListener implements ActionListener{
 	
 	private JFrame gameFrame;
 	private JTextField[] username;
+	private Icon empty;
+	private JButton[][] boardButton;
 	private JComboBox<String> difficultyDropDown;
 	private JComboBox<String> playerDropDown;
 
-	public MenuListener(JFrame gameFrame, JPanel baordPanel) {
+	public MenuListener(JFrame gameFrame, JButton[][] boardButton, Icon empty) {
 		this.gameFrame = gameFrame;
+		this.boardButton = boardButton;
+		this.empty = empty;
 		username = new JTextField[2];
 		username[0] = new JTextField(10);
         username[1] = new JTextField(10);
+	}
+	
+	public MenuListener(JFrame gameFrame) {
+		this.gameFrame = gameFrame;
 	}
 	
 	@Override
@@ -40,8 +50,8 @@ class MenuListener implements ActionListener{
 				System.out.println(username[1].getText());
 				System.out.println(difficultyDropDown.getSelectedItem());
 				/////////////////////////////////////////////////////////
-				gameFrame.remove(GUI.getPanelBaord());
-				GUI.generateBoard();
+				//gameFrame.remove(GUI.getPanelBaord());
+				cleanBoard();
 				gameFrame.revalidate();
 			}
 			else if(selection == JOptionPane.CANCEL_OPTION){
@@ -84,9 +94,24 @@ class MenuListener implements ActionListener{
         centerPanel.add(diffculty);
         centerPanel.add(difficultyDropDown);
         
-        
         basePanel.add(centerPanel);
 		
         return basePanel;
     }
+	
+	public void cleanBoard(){
+		for (int i = 0; i < boardButton.length; i++) {
+			for (int j = 0; j < boardButton[i].length; j++) {
+				boardButton[i][j].setIcon(empty);
+				//disable all the rows but the first one
+				if (i < boardButton.length - 1) {
+					boardButton[i][j].setDisabledIcon(empty); 
+					boardButton[i][j].setEnabled(false); 
+				} 
+				else{
+					boardButton[i][j].setEnabled(true); 
+				}
+			}
+		}
+	}
 }
