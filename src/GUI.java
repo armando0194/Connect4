@@ -1,28 +1,40 @@
-import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class GUI {
 
-	private int rows;
-	private int colums;
+	private final int rows = 6;
+	private final int colums = 7;
 
+	private State gameState;
 	private JFrame gameFrame;
+	CardLayout currentPanelLayout;
 	private JMenuBar menuBar;
 	private JMenu menu;
+	private JPanel currentPanel;
 	private JPanel boardPanel;
-
+	JLabel playerTurn;
+	
 	private JButton[][] boardButtons; 
 	private BoardListener[][] boardListener; 
 
@@ -30,21 +42,27 @@ public class GUI {
 	private Icon redChip = new ImageIcon("src\\images\\Red.png"); 
 	private Icon yellowChip = new ImageIcon("src\\images\\Yellow.png");
 	
-	public GUI(int rows, int colums) {
-		
-		//initiate Values
-		this.rows = rows;
-		this.colums = colums;
-		
-        //Generate Frame and components
+	public GUI( State gameState) {
+		this.gameState = gameState;
+		generateGameFrame();
+	}
+	
+	public void generateGameFrame(){
+		//Generate Frame and components
         gameFrame = new JFrame("Connect4");
-		gameFrame.setLayout(new BorderLayout());
+		currentPanelLayout = new CardLayout();
+		currentPanel = new JPanel(currentPanelLayout);
 		
+		//Generate different cardLayout elements
+		generateStartMenu();
+		generateSettingPanel();
 		generateBoard();
 		generateMenu();
-		
+		generateRulesPanel();	
+	
 		//Frame Settings
-		gameFrame.setSize(440,440);
+		gameFrame.add(currentPanel);
+		gameFrame.setSize(440,480);
 		gameFrame.setVisible(true);
 		gameFrame.setEnabled(true);
 		gameFrame.setResizable(false);
@@ -53,19 +71,72 @@ public class GUI {
 		gameFrame.setLocationRelativeTo(null);
 	}
 	
+	private void generateSettingPanel() {
+        // Initialize panel
+		JPanel settingPanel = new JPanel();
+        JButton startButton = new JButton("Start");
+        JButton backStart = new JButton("Back");
+        
+        //Create dropdowns and text input
+        String[] difficultyOptions = { "Easy", "Medium", "Hard" };
+        String[] playerOptions = { "1", "2" };
+        JComboBox<String> playerDropDown = new JComboBox<String>(playerOptions);
+        JComboBox<String> difficultyDropDown = new JComboBox<String>(difficultyOptions);
+        JTextField[] username = new JTextField[2];
+        username[0] = new JTextField(20);
+        username[1] = new JTextField(20);
+        
+        //Set Button listeners
+        MenuListener startListener = new MenuListener(currentPanel, currentPanelLayout, playerDropDown, difficultyDropDown, username, gameState);
+        MenuListener backListener = new MenuListener(currentPanel, currentPanelLayout);
+        startButton.addActionListener(startListener);
+        backStart.addActionListener(backListener);
+        
+        settingPanel.setLayout(new GridLayout(5, 2, 2, 2));
+        settingPanel.setBorder(BorderFactory.createEmptyBorder(100, 20, 100, 20));
+        settingPanel.setOpaque(true);
+        
+        //Input Labels
+        JLabel numberOfPlayers = new JLabel("Enter the number of players: ");
+        JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
+        JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
+        JLabel diffculty = new JLabel("Enter Dificulty: ");
+               
+        //Inputs (dropdowns and textarea)
+        settingPanel.add(numberOfPlayers);
+        settingPanel.add(playerDropDown);
+        settingPanel.add(usernamePlayer1);
+        settingPanel.add(username[0]);
+        settingPanel.add(usernamePlayer2);
+        settingPanel.add(username[1]);
+        settingPanel.add(diffculty);
+        settingPanel.add(difficultyDropDown);
+        settingPanel.add(startButton);
+        settingPanel.add(backStart);
+
+        currentPanel.add(settingPanel, "Settings");
+		
+	}
+
+	public void generateRulesPanel() {
+		
+	}
+
 	/**
 	 * Initiate the board
 	 */
 	public void generateBoard() {
 		
+		JLabel turnLabel = new JLabel("Turn: ");
+		playerTurn = new JLabel("");
 		boardListener = new BoardListener[rows][colums];
 		boardButtons = new JButton[rows][colums]; 
-		boardPanel = new JPanel(new GridLayout(rows, colums));
+		boardPanel = new JPanel(new GridLayout(rows+1, colums));
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < colums; j++) {
 				boardButtons[i][j] = new JButton(openSlot);
-				boardListener[i][j] = new BoardListener(i, j, boardButtons, redChip, yellowChip);
+				boardListener[i][j] = new BoardListener(i, j, boardButtons, redChip, yellowChip, gameState);
 				boardButtons[i][j].addActionListener(boardListener[i][j]); 
 				boardButtons[i][j].setBackground(Color.BLUE); 
 				boardButtons[i][j].setBorderPainted(false);//Removes weird white lines
@@ -82,9 +153,13 @@ public class GUI {
 				}
 			}
 		}
-
+		
+		boardPanel.add(turnLabel);
+		boardPanel.add(playerTurn);
+		//boardPanel.setBackground(Color.BLUE);
 		boardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
-		gameFrame.add(boardPanel, BorderLayout.CENTER);
+		currentPanel.add(boardPanel, "Board");
+		//gameFrame.add(boardPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -110,5 +185,46 @@ public class GUI {
 		menu.add(quitGameItem);
 		menuBar.add(menu);
 		gameFrame.setJMenuBar(menuBar);
+	}
+	
+	public void generateStartMenu(){
+
+		//Initialize panel and layout
+		JPanel menuPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		
+		//Initialize panel elements
+		BufferedImage logo = readLogoImage();
+		JLabel logoLabel = new JLabel(new ImageIcon(logo));
+		JButton newGame = new JButton("Play");
+		JButton rules = new JButton("Rules");
+		
+		//Adding functionality to Buttons
+		MenuListener newGameListener = new MenuListener(currentPanel, currentPanelLayout);
+		MenuListener rulesListener = new MenuListener(currentPanel, currentPanelLayout);
+		newGame.addActionListener(newGameListener);
+		rules.addActionListener(rulesListener);
+		
+		//Add elements to panel
+		menuPanel.add(logoLabel, gbc);
+		menuPanel.add(newGame, gbc);
+		menuPanel.add(rules, gbc);
+		menuPanel.setBackground(Color.WHITE);
+		currentPanel.add(menuPanel, "Start Menu");
+	}
+	
+	public void setTurn(){
+		playerTurn.setText("hola");
+	}
+	
+	public BufferedImage readLogoImage(){
+		BufferedImage logo = null;
+		try {
+			logo = ImageIO.read(new File("src\\images\\logo.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return logo;
 	}
 }

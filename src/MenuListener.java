@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,49 +17,66 @@ import javax.swing.JTextField;
 class MenuListener implements ActionListener{
 	
 	private JFrame gameFrame;
-	private JTextField[] username;
+	private JPanel currentPanel;
+	private CardLayout currentPanelLayout;
+	private JTextField[] usernameInput;
 	private Icon empty;
 	private Icon yellowChip;
 	private JButton[][] boardButton;
 	private JComboBox<String> difficultyDropDown;
 	private JComboBox<String> playerDropDown;
+	private State gameState;
 
 	public MenuListener(JFrame gameFrame, JButton[][] boardButton, Icon empty, Icon yellowChip) {
 		this.gameFrame = gameFrame;
 		this.boardButton = boardButton;
 		this.empty = empty;
 		this.yellowChip = yellowChip;
-		username = new JTextField[2];
-		username[0] = new JTextField(10);
-        username[1] = new JTextField(10);
+		usernameInput = new JTextField[2];
+		usernameInput[0] = new JTextField(10);
+		usernameInput[1] = new JTextField(10);
 	}
 	
 	public MenuListener(JFrame gameFrame) {
 		this.gameFrame = gameFrame;
 	}
 	
+	public MenuListener(JPanel currentPanel, CardLayout currentPanelLayout) {
+		this.currentPanel = currentPanel;
+		this.currentPanelLayout = currentPanelLayout;
+	}
+
+	public MenuListener(JPanel currentPanel, CardLayout currentPanelLayout, JComboBox<String> playerDropDown, JComboBox<String> difficultyDropDown, JTextField[] usernameInput, State gameState) {
+		this.currentPanel = currentPanel;
+		this.currentPanelLayout = currentPanelLayout;
+		this.playerDropDown = playerDropDown;
+		this.difficultyDropDown = difficultyDropDown;
+		this.gameState = gameState;
+		this.usernameInput = usernameInput;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String optionSelected = e.getActionCommand(); // get which option in the menu was clicked
 		if(optionSelected.equals("New Game")){  // remove current board and generate a new one
-			int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Settings : ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-			if(selection == JOptionPane.OK_OPTION){
-				//Test///////////////////////////////////////////////////
-				System.out.println(playerDropDown.getSelectedItem());
-				System.out.println(username[0].getText());
-				System.out.println(username[1].getText());
-				System.out.println(difficultyDropDown.getSelectedItem());
-				/////////////////////////////////////////////////////////
-				//gameFrame.remove(GUI.getPanelBaord());
-				cleanBoard();
-				gameFrame.revalidate();
-			}
-			else if(selection == JOptionPane.CANCEL_OPTION){
-				System.out.println("Canceled"); //test
-			}	
+			settingsGame();
 		}
 		else if(optionSelected.equals("Quit")){  // close the game
 			gameFrame.dispose();
+		}
+		else if(optionSelected.equals("Play")){
+			currentPanelLayout.show(currentPanel, "Settings");
+		}
+		else if(optionSelected.equals("Rules")){
+			currentPanelLayout.show(currentPanel, "Rules");
+		}
+		else if(optionSelected.equals("Start")){
+			setNewGame();
+			currentPanelLayout.show(currentPanel, "Board");
+		}
+		else if(optionSelected.equals("Back")){
+			System.out.println("Back");
+			currentPanelLayout.first(currentPanel);
 		}
 	}	
 	
@@ -93,9 +111,9 @@ class MenuListener implements ActionListener{
         centerPanel.add(numberOfPlayers);
         centerPanel.add(playerDropDown);
         centerPanel.add(usernamePlayer1);
-        centerPanel.add(username[0]);
+        centerPanel.add(usernameInput[0]);
         centerPanel.add(usernamePlayer2);
-        centerPanel.add(username[1]);
+        centerPanel.add(usernameInput[1]);
         centerPanel.add(diffculty);
         centerPanel.add(difficultyDropDown);
         
@@ -122,5 +140,31 @@ class MenuListener implements ActionListener{
 				}
 			}
 		}
+	}
+	
+	public void settingsGame(){
+		int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Settings : ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		if(selection == JOptionPane.OK_OPTION){
+			setNewGame();
+			cleanBoard();
+			gameFrame.revalidate();
+		}
+		else if(selection == JOptionPane.CANCEL_OPTION){
+			System.out.println("Canceled"); //test
+		}	
+	}
+	
+	public void setNewGame(){
+		String[] username = new String[2];
+		int numOfPlayers = Integer.parseInt( (String)playerDropDown.getSelectedItem() );
+		
+		for (int i = 0; i < usernameInput.length; i++) {
+			System.out.println(usernameInput[i].getText());
+			username[i] = usernameInput[i].getText();
+		}
+		
+		gameState.createPlayers(username, numOfPlayers);
+		gameState.initBoard();
+		System.out.println("chale");
 	}
 }

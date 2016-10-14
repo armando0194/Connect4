@@ -1,7 +1,12 @@
-
 public class test {
 	public static void main(String[] args) {
-		GUI test = new GUI(6, 7);
+		State gameState = new State();
+		GUI test = new GUI(gameState);
+		
+		if(gameState.isBoardFull()){
+			
+		}
+		Player[] players = gameState.getPlayers();
 	}
 	
 }

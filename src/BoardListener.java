@@ -14,16 +14,18 @@ class BoardListener implements ActionListener {
 	private JButton[][] boardButton;
 	private Icon redChip;
 	private Icon yellowChip;
+	private State gameState;
 	
 	/**
 	 * Constructor 
 	 */
-	public BoardListener(int clickedRow, int clickedCol, JButton[][] boardButton, Icon redChip, Icon yellowChip) {
+	public BoardListener(int clickedRow, int clickedCol, JButton[][] boardButton, Icon redChip, Icon yellowChip, State gameState) {
 		this.clickedRow = clickedRow;
 		this.clickedCol = clickedCol;
 		this.boardButton = boardButton;
 		this.yellowChip = yellowChip;
 		this.redChip = redChip;
+		this.gameState = gameState;
 	} 
 	
 	/**
