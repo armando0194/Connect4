@@ -21,28 +21,37 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class GUI {
+public class View {
 
 	private final int rows = 6;
 	private final int colums = 7;
 
 	private State gameState;
 	private JFrame gameFrame;
-	CardLayout currentPanelLayout;
+	private CardLayout currentPanelLayout;
+	private String currLayoutCard;
+
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JPanel currentPanel;
 	private JPanel boardPanel;
-	JLabel playerTurn;
+	private JLabel playerTurn;
 	
 	private JButton[][] boardButtons; 
 	private BoardListener[][] boardListener; 
+	
+	private final String[] difficultyOptions = { "Easy", "Medium", "Hard" };
+    private final String[] playerOptions = { "1", "2" };
+	private final JComboBox<String> playerDropDown  = new JComboBox<String>(playerOptions);
+    private final JComboBox<String> difficultyDropDown = new JComboBox<String>(difficultyOptions);
+    private JTextField[] username = new JTextField[2];
 
 	private Icon openSlot = new ImageIcon("src\\images\\empty.png");
 	private Icon redChip = new ImageIcon("src\\images\\Red.png"); 
 	private Icon yellowChip = new ImageIcon("src\\images\\Yellow.png");
 	
-	public GUI( State gameState) {
+	public View( State gameState) {
+		currLayoutCard = "Start Game";
 		this.gameState = gameState;
 		generateGameFrame();
 	}
@@ -57,7 +66,6 @@ public class GUI {
 		generateStartMenu();
 		generateSettingPanel();
 		generateBoard();
-		generateMenu();
 		generateRulesPanel();	
 	
 		//Frame Settings
@@ -76,19 +84,11 @@ public class GUI {
 		JPanel settingPanel = new JPanel();
         JButton startButton = new JButton("Start");
         JButton backStart = new JButton("Back");
-        
-        //Create dropdowns and text input
-        String[] difficultyOptions = { "Easy", "Medium", "Hard" };
-        String[] playerOptions = { "1", "2" };
-        JComboBox<String> playerDropDown = new JComboBox<String>(playerOptions);
-        JComboBox<String> difficultyDropDown = new JComboBox<String>(difficultyOptions);
-        JTextField[] username = new JTextField[2];
-        username[0] = new JTextField(20);
-        username[1] = new JTextField(20);
+     
         
         //Set Button listeners
-        MenuListener startListener = new MenuListener(currentPanel, currentPanelLayout, playerDropDown, difficultyDropDown, username, gameState);
-        MenuListener backListener = new MenuListener(currentPanel, currentPanelLayout);
+        MenuListener startListener = new MenuListener(this, gameState);
+        MenuListener backListener = new MenuListener(this, gameState);
         startButton.addActionListener(startListener);
         backStart.addActionListener(backListener);
         
@@ -101,6 +101,8 @@ public class GUI {
         JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
         JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
         JLabel diffculty = new JLabel("Enter Dificulty: ");
+		username[0] = new JTextField(20);
+		username[1] = new JTextField(20);
                
         //Inputs (dropdowns and textarea)
         settingPanel.add(numberOfPlayers);
@@ -165,7 +167,7 @@ public class GUI {
 	/**
 	 * Generates a menu at the top left of the window
 	 */
-	public void generateMenu() {
+	public void generateBarMenu() {
 		// initiate the menu
 		menuBar = new JMenuBar();
 		menu = new JMenu("Game");
@@ -175,8 +177,8 @@ public class GUI {
 		JMenuItem quitGameItem = new JMenuItem("Quit");
 		
 		// Add listener for the options
-		MenuListener newGameListener = new MenuListener(gameFrame, boardButtons, openSlot, yellowChip); 
-		MenuListener quitListener = new MenuListener(gameFrame); 
+		MenuListener newGameListener = new MenuListener(this, gameState); 
+		MenuListener quitListener = new MenuListener(this, gameState); 
 		newGameItem.addActionListener(newGameListener);
 		quitGameItem.addActionListener(quitListener);
 		
@@ -201,8 +203,8 @@ public class GUI {
 		JButton rules = new JButton("Rules");
 		
 		//Adding functionality to Buttons
-		MenuListener newGameListener = new MenuListener(currentPanel, currentPanelLayout);
-		MenuListener rulesListener = new MenuListener(currentPanel, currentPanelLayout);
+		MenuListener newGameListener = new MenuListener(this, gameState);
+		MenuListener rulesListener = new MenuListener(this, gameState);
 		newGame.addActionListener(newGameListener);
 		rules.addActionListener(rulesListener);
 		
@@ -226,5 +228,52 @@ public class GUI {
 			e.printStackTrace();
 		}
 		return logo;
+	}
+	
+	public CardLayout getCurrentPanelLayout() {
+		return currentPanelLayout;
+	}
+
+	public JPanel getCurrentPanel() {
+		return currentPanel;
+	}
+	
+	public JComboBox<String> getPlayerDropDown() {
+		return playerDropDown;
+	}
+
+	public JComboBox<String> getDifficultyDropDown() {
+		return difficultyDropDown;
+	}
+	
+	public JTextField[] getUsername() {
+		return username;
+	}
+	
+	public JTextField getUsername(int i){
+		return username[i];
+	}
+	
+	public void initializeUsername(){
+		username[0] = new JTextField(20);
+		username[0] = new JTextField(20);
+	}
+	
+	public JFrame getFrame(){
+		return gameFrame;
+	}
+	
+	public boolean isGameReady(){
+		if(currLayoutCard.equalsIgnoreCase("Board"))
+			return true;
+		return false;
+	}
+	
+	public void setCurrLayoutCard(String currLayoutCard){
+		this.currLayoutCard = currLayoutCard;
+	}
+	
+	public String getCurrLayoutCard(){
+		return currLayoutCard;
 	}
 }

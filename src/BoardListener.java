@@ -8,7 +8,6 @@ import javax.swing.JButton;
 	 *  Board Buttons Listener
 	 */
 class BoardListener implements ActionListener {
-	private static int turn;
 	private int clickedRow; // slot button row
 	private int clickedCol; // slot button column 
 	private JButton[][] boardButton;
@@ -36,18 +35,20 @@ class BoardListener implements ActionListener {
 		int lastRow = 0;
 
 		boardButton[clickedRow][clickedCol].setEnabled(false); // Disable the slot clicked
+		gameState.makeMove(clickedRow, clickedCol);
+		
 		if (clickedRow > lastRow) {                            
 			boardButton[clickedRow - 1][clickedCol].setEnabled(true); // enables the slot above the clicked one
 		}
 
 		// Basic logic to change turns. Needed to make the prototype work - Temporary
-		turn = (turn== 1) ? 0 : 1;
+		gameState.switchTurn();
 
 		// changes the color of the chip every turn
 		for (int i = 0; i < boardButton.length; i++) {
 			for (int j = 0; j < boardButton[i].length; j++) {
 				if (boardButton[i][j].isEnabled()) {
-					if (turn == 1) {
+					if (gameState.getTurn() == 1) {
 						boardButton[i][j].setDisabledIcon(redChip);
 						boardButton[i][j].setRolloverIcon(redChip);
 					} // end if
@@ -58,5 +59,7 @@ class BoardListener implements ActionListener {
 				}
 			}
 		}
+		
+		gameState.printBoard();
 	}
 }

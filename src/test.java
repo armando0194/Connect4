@@ -1,12 +1,12 @@
+
 public class test {
 	public static void main(String[] args) {
 		State gameState = new State();
-		GUI test = new GUI(gameState);
+		View gameView = new View(gameState);
 		
-		if(gameState.isBoardFull()){
-			
+		while( gameView.isGameReady() ){
+			System.out.println(gameView.getCurrLayoutCard());
 		}
-		Player[] players = gameState.getPlayers();
 	}
 	
 }

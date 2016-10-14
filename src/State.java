@@ -6,18 +6,17 @@ public class State {
 	
 	private final int rows = 6;
 	private final int columns = 7;
-	private int playerTurn;
+	private int playerTurn = 0;
 	
 	private char[][] board;
-	private int numOfPlayers;
 	private Player[] player = new Player[2];
-	
 	
 	public State(){
 		initBoard();
 	}
 	
 	public void initBoard(){
+		playerTurn = 0;
 		board = new char[6][7];
 		
 		for (int i = 0; i < rows; i++) {
@@ -36,6 +35,16 @@ public class State {
 			}
 		}
 		return true;
+	}
+	
+	public void printBoard(){
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				System.out.print(board[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 	
 	public boolean checkWinner(){
@@ -88,8 +97,11 @@ public class State {
 	}
 	
 	
+	public void switchTurn(){
+		playerTurn = (playerTurn == 0) ? 1 : 0;
+	}
+	
 	public void createPlayers(String[] username, int numOfPlayers){
-		this.numOfPlayers = numOfPlayers;
 		//Create human players
 		for (int i = 0; i < numOfPlayers; i++) {
 			player[i] = new HumanPlayer(username[i]);
@@ -100,7 +112,28 @@ public class State {
 		}
 	}
 	
+	public void makeMove(int clickedRow, int clickedCol){
+		if(playerTurn == 0){
+			board[clickedRow][clickedCol] = yellowChip;
+		}
+		else{
+			board[clickedRow][clickedCol] = redChip;
+		}
+	}
+	
 	public Player[] getPlayers(){
 		return player;
+	}
+	
+	public char[][] getBoard(){
+		return board;
+	}
+	
+	public int getPlayerTurn(){
+		return playerTurn;
+	}
+	
+	public int getTurn(){
+		return playerTurn;
 	}
 }
