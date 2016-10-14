@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,7 +12,6 @@ import javax.swing.JPanel;
 class MenuListener implements ActionListener{
 	
 	private View gameView;
-	private JFrame gameFrame;
 	private State gameState;
 	
 	public MenuListener(View gameView, State gameState){
@@ -28,7 +26,7 @@ class MenuListener implements ActionListener{
 			newGamesSettings();
 		}
 		else if(optionSelected.equals("Quit")){  // close the game
-			gameFrame.dispose();
+			gameView.getFrame().dispose();
 		}
 		else if(optionSelected.equals("Play")){
 			gameView.setCurrLayoutCard("Settings");
@@ -111,6 +109,5 @@ class MenuListener implements ActionListener{
 		
 		gameState.createPlayers(username, numOfPlayers);
 		gameState.initBoard();
-		System.out.println("chale");
 	}
 }

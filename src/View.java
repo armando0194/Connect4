@@ -56,6 +56,9 @@ public class View {
 		generateGameFrame();
 	}
 	
+	/**
+	 * Generates the frame in which the game will be played 
+	 */
 	public void generateGameFrame(){
 		//Generate Frame and components
         gameFrame = new JFrame("Connect4");
@@ -79,12 +82,14 @@ public class View {
 		gameFrame.setLocationRelativeTo(null);
 	}
 	
+	/**
+	 * Generates the star menu setting panel in which the user can select usernames, difficulty and number of players
+	 */
 	private void generateSettingPanel() {
         // Initialize panel
 		JPanel settingPanel = new JPanel();
         JButton startButton = new JButton("Start");
         JButton backStart = new JButton("Back");
-     
         
         //Set Button listeners
         MenuListener startListener = new MenuListener(this, gameState);
@@ -125,7 +130,7 @@ public class View {
 	}
 
 	/**
-	 * Initiate the board
+	 * Initiates a connect 4 board and creates a button for every slot
 	 */
 	public void generateBoard() {
 		
@@ -138,7 +143,7 @@ public class View {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < colums; j++) {
 				boardButtons[i][j] = new JButton(openSlot);
-				boardListener[i][j] = new BoardListener(i, j, boardButtons, redChip, yellowChip, gameState);
+				boardListener[i][j] = new BoardListener(i, j, boardButtons, redChip, yellowChip, openSlot, gameState, playerTurn);
 				boardButtons[i][j].addActionListener(boardListener[i][j]); 
 				boardButtons[i][j].setBackground(Color.BLUE); 
 				boardButtons[i][j].setBorderPainted(false);//Removes weird white lines
@@ -189,6 +194,9 @@ public class View {
 		gameFrame.setJMenuBar(menuBar);
 	}
 	
+	/**
+	 * Generates the initial panel that shows the logo of the game, start button and rules buttons.
+	 */
 	public void generateStartMenu(){
 
 		//Initialize panel and layout
@@ -215,11 +223,7 @@ public class View {
 		menuPanel.setBackground(Color.WHITE);
 		currentPanel.add(menuPanel, "Start Menu");
 	}
-	
-	public void setTurn(){
-		playerTurn.setText("hola");
-	}
-	
+
 	public BufferedImage readLogoImage(){
 		BufferedImage logo = null;
 		try {
@@ -261,12 +265,6 @@ public class View {
 	
 	public JFrame getFrame(){
 		return gameFrame;
-	}
-	
-	public boolean isGameReady(){
-		if(currLayoutCard.equalsIgnoreCase("Board"))
-			return true;
-		return false;
 	}
 	
 	public void setCurrLayoutCard(String currLayoutCard){
