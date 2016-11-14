@@ -42,8 +42,10 @@ public class View {
 	
 	private final String[] difficultyOptions = { "Easy", "Medium", "Hard" };
     private final String[] playerOptions = { "1", "2" };
+    private final String[] firstTurnOptions = {"Player", "Computer"};
 	private final JComboBox<String> playerDropDown  = new JComboBox<String>(playerOptions);
     private final JComboBox<String> difficultyDropDown = new JComboBox<String>(difficultyOptions);
+    private final JComboBox<String> firstTurnDropDown = new JComboBox<String>(firstTurnOptions);
     private JTextField[] username = new JTextField[2];
 
 	private Icon openSlot = new ImageIcon("src\\images\\empty.png");
@@ -97,7 +99,7 @@ public class View {
         startButton.addActionListener(startListener);
         backStart.addActionListener(backListener);
         
-        settingPanel.setLayout(new GridLayout(5, 2, 2, 2));
+        settingPanel.setLayout(new GridLayout(6, 2, 2, 2));
         settingPanel.setBorder(BorderFactory.createEmptyBorder(100, 20, 100, 20));
         settingPanel.setOpaque(true);
         
@@ -106,6 +108,8 @@ public class View {
         JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
         JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
         JLabel diffculty = new JLabel("Enter Dificulty: ");
+        JLabel firstTurn = new JLabel("Please select who goes first");
+        
 		username[0] = new JTextField(20);
 		username[1] = new JTextField(20);
                
@@ -118,6 +122,8 @@ public class View {
         settingPanel.add(username[1]);
         settingPanel.add(diffculty);
         settingPanel.add(difficultyDropDown);
+        settingPanel.add(firstTurn);
+        settingPanel.add(firstTurnDropDown);
         settingPanel.add(startButton);
         settingPanel.add(backStart);
 
@@ -234,6 +240,15 @@ public class View {
 		return logo;
 	}
 	
+	public void makeMove(int row, int col){
+		if(gameState.isMoveValid(row, col)){
+			boardButtons[row][col].setRolloverIcon(yellowChip);
+			boardButtons[row][col].setDisabledIcon(redChip);
+			boardButtons[row][col].setEnabled(false);
+			boardButtons[row-1][col].setEnabled(true);
+		}
+	}
+	
 	public CardLayout getCurrentPanelLayout() {
 		return currentPanelLayout;
 	}
@@ -250,6 +265,10 @@ public class View {
 		return difficultyDropDown;
 	}
 	
+	public JComboBox<String> getFirstTurnDropDown() {
+		return firstTurnDropDown;
+		
+	}
 	public JTextField[] getUsername() {
 		return username;
 	}

@@ -19,6 +19,9 @@ class MenuListener implements ActionListener{
 		this.gameState = gameState;
 	}
 
+	/**
+	 * Changes the current cardboard layout
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String optionSelected = e.getActionCommand(); // get which option in the menu was clicked
@@ -60,7 +63,7 @@ class MenuListener implements ActionListener{
         basePanel.setOpaque(true);
         
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(4, 2, 5, 5));
+        centerPanel.setLayout(new GridLayout(5, 2, 5, 5));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         centerPanel.setOpaque(true);
         
@@ -69,8 +72,9 @@ class MenuListener implements ActionListener{
         JLabel usernamePlayer1 = new JLabel("Enter username player 1: ");
         JLabel usernamePlayer2 = new JLabel("Enter username player 2 (if any): ");
         JLabel diffculty = new JLabel("Enter Dificulty: ");
+        JLabel firstTurn = new JLabel("Please select who goes first");
                
-        //Inputs (dropdowns and textarea)
+        //Inputs dropdowns and textarea
         centerPanel.add(numberOfPlayers);
         centerPanel.add(gameView.getPlayerDropDown());
         centerPanel.add(usernamePlayer1);
@@ -79,6 +83,8 @@ class MenuListener implements ActionListener{
         centerPanel.add(gameView.getUsername(1));
         centerPanel.add(diffculty);
         centerPanel.add(gameView.getDifficultyDropDown());
+        centerPanel.add(firstTurn);
+        centerPanel.add(gameView.getFirstTurnDropDown());
         
         basePanel.add(centerPanel);
 		
@@ -88,10 +94,10 @@ class MenuListener implements ActionListener{
 	public void newGamesSettings(){
 		int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Settings : ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if(selection == JOptionPane.OK_OPTION){
-			setNewGame();
 			gameView.generateBoard();
 			gameView.getCurrentPanelLayout().show(gameView.getCurrentPanel(), "Board");
 			gameView.getFrame().revalidate();
+			setNewGame();
 		}
 		else if(selection == JOptionPane.CANCEL_OPTION){
 			System.out.println("Canceled"); //test
@@ -99,15 +105,24 @@ class MenuListener implements ActionListener{
 	}
 	
 	public void setNewGame(){
-		String[] username = new String[2];
 		int numOfPlayers = Integer.parseInt( (String)gameView.getPlayerDropDown().getSelectedItem() );
+		boolean computerFirst = gameView.getFirstTurnDropDown().getSelectedItem().equals("Computer") ? true : false;
+		String difficultySelected = gameView.getDifficultyDropDown().getSelectedItem().toString();
+		int movesAhead = 0; // set default difficulty to easy
 		
-		for (int i = 0; i < gameView.getUsername().length; i++) {
-			System.out.println(gameView.getUsername(i).getText());
-			username[i] = gameView.getUsername(i).getText();
+		if(difficultySelected.equals("Medium"))
+			movesAhead = 2;
+		else if(difficultySelected.equals("Hard"))
+			movesAhead = 4;
+		
+		// if the computer goes first and there is only one player
+		if(numOfPlayers == 1 && computerFirst){
+			// A chip in the middle is the best first move possible
+			gameView.makeMove(5, 3);
+			//gameState.move(5, 3);
 		}
 		
-		gameState.createPlayers(username, numOfPlayers);
+		gameState.createPlayers(gameView.getUsername(), numOfPlayers, movesAhead);
 		gameState.initBoard();
 	}
 }

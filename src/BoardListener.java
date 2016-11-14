@@ -10,11 +10,11 @@ import javax.swing.JPanel;
 
 
 /**
-	 *  Board Buttons Listener
-	 */
+ *  Board Buttons Listener
+*/
 class BoardListener implements ActionListener {
-	private int clickedRow; // slot button row
-	private int clickedCol; // slot button column 
+	private int clickedRow; 
+	private int clickedCol; 
 	private JButton[][] boardButton;
 	private JLabel turnLabel;
 	private Icon redChip;
@@ -41,7 +41,7 @@ class BoardListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {		
 		// Disable the slot clicked and enable button above
 		boardButton[clickedRow][clickedCol].setEnabled(false); 
-		gameState.makeMove(clickedRow, clickedCol);
+		gameState.move(clickedRow, clickedCol);
 		enableButtonAbove(clickedRow, clickedCol);
 		
 		//if there is a winner, disable board and report winner
@@ -63,29 +63,18 @@ class BoardListener implements ActionListener {
 
 	private void computerMakeMove() {
 		ComputerPlayer computerPlayer = (ComputerPlayer)gameState.getPlayer(1);
-		int col = computerPlayer.generateMove(); 
-		int row;
-		
-		while(gameState.isColFull(col)){
-			col = computerPlayer.generateMove();
-		}		
-		
-		for (row = boardButton.length - 1; row >= 0; row--) {
-			if(gameState.isMoveValid(row, col)){
-				break;
-			}
-		}
+		int col = computerPlayer.getMove(gameState);
+		int row = getEmptyRow(col);	
 		
 		boardButton[row][col].setEnabled(false);
-		gameState.makeMove(row, col);
+		gameState.move(row, col);
 		enableButtonAbove(row, col);
-		
-		
 		
 		if(gameState.checkWinner()){
 			disableBoard();
 			reportWinner(gameState.getCurrentUsername());
 		}	
+		
 		gameState.switchTurn();
 		paintChip();
 	}
@@ -154,5 +143,20 @@ class BoardListener implements ActionListener {
 		if (row > 0) {                            
 			boardButton[row - 1][col].setEnabled(true); 
 		}
+	}
+	
+	/**
+	 * Given a column, determines which row is empty
+	 * @param col - column in which the user wants to place a chip
+	 * @return - the row in which a chip can be placed
+	 */
+	private int getEmptyRow(int col){
+		//Check 
+		for (int row = boardButton.length - 1; row > 0; row--) {
+			if(gameState.isMoveValid(row, col)){
+				return row;
+			}
+		}
+		return 0;
 	}
 }
