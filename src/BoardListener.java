@@ -23,7 +23,15 @@ class BoardListener implements ActionListener {
 	private State gameState;
 	
 	/**
-	 * Constructor 
+	 * Constructor
+	 * @param clickedRow  - new clicked row
+	 * @param clickedCol  - new clicked column
+	 * @param boardButton - new boardButton
+	 * @param redChip     - new red chip
+	 * @param yellowChip  - new yellow chip
+	 * @param openSlot    - new open slot
+	 * @param gameState   - new game state
+	 * @param turnLabel   - new turn label
 	 */
 	public BoardListener(int clickedRow, int clickedCol, JButton[][] boardButton, Icon redChip, Icon yellowChip, Icon openSlot, State gameState, JLabel turnLabel) {
 		this.clickedRow = clickedRow;
@@ -36,7 +44,9 @@ class BoardListener implements ActionListener {
 		this.gameState = gameState;
 	} 
 	
-
+	/**
+	 * Draws placed chips on the view and reports winners
+	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {		
 		// Disable the slot clicked and enable button above
@@ -48,6 +58,11 @@ class BoardListener implements ActionListener {
 		if(gameState.checkWinner()){
 			disableBoard();
 			reportWinner(gameState.getCurrentUsername());
+		}
+		//Check if it is a draw
+		else if(gameState.isBoardFull()){
+			disableBoard();
+			reportDraw();
 		}
 		else{
 			gameState.switchTurn();
@@ -61,6 +76,9 @@ class BoardListener implements ActionListener {
 		gameState.printBoard();
 	}
 
+	/**
+	 * Generates the next computer move
+	 */
 	private void computerMakeMove() {
 		ComputerPlayer computerPlayer = (ComputerPlayer)gameState.getPlayer(1);
 		int col = computerPlayer.getMove(gameState);
@@ -74,6 +92,10 @@ class BoardListener implements ActionListener {
 			disableBoard();
 			reportWinner(gameState.getCurrentUsername());
 		}	
+		else if(gameState.isBoardFull()){
+			disableBoard();
+			reportDraw();
+		}
 		
 		gameState.switchTurn();
 		paintChip();
@@ -81,13 +103,22 @@ class BoardListener implements ActionListener {
 
 
 	/**
-	 * Generates a pop up that reports which user won
+	 * Generates a pop up that reports the game winner
 	 * @param winner - username of the winner
 	 */
 	private void reportWinner(String winner) {
 		JPanel winnerMessage = new JPanel();
 		winnerMessage.add(new JLabel("Winner: " + winner));
 		JOptionPane.showMessageDialog(null,winnerMessage,"Winner",JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Generates a pop up that reports the players that it is a draw
+	 */
+	private void reportDraw(){
+		JPanel drawMessage = new JPanel();
+		drawMessage.add(new JLabel("It is a Draw"));
+		JOptionPane.showMessageDialog(null,drawMessage,"Draw",JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	/**

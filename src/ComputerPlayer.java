@@ -4,6 +4,11 @@ public class ComputerPlayer extends Player {
 	final private int maxValue = 1000000, minValue = -1000000;
 	private int movesAhead;
 	
+	/**
+	 * Constructor
+	 * @param board      - new board
+	 * @param movesAhead - computer moves ahead
+	 */
 	public ComputerPlayer(char[][] board, int movesAhead) {
 		super("AI");
 		this.movesAhead = movesAhead;
@@ -11,8 +16,8 @@ public class ComputerPlayer extends Player {
 
 	/**
 	 * Generates moves for the computer depending on the difficulty	
-	 * @param gameState
-	 * @return
+	 * @param gameState - current game state
+	 * @return - best move
 	 * @see negamax
 	 * @see generateRandomMove
 	 */
@@ -33,9 +38,10 @@ public class ComputerPlayer extends Player {
 	
 	/**
 	 * Generates a random column number
+	 * @param gameState - current game state
 	 * @return - column number
 	 */
-	public int generateRandomMove(State gameState) {
+	private int generateRandomMove(State gameState) {
 		Random random = new Random();
 		int min = 0;
 		int max = 6;

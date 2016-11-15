@@ -1,5 +1,5 @@
 /**
- * This class is used by the alpha beta pruning algorithm
+ * This class is used by the negamax algorithm
  * in order to keep track of the moves and their 
  * corresponding scores
  * @see ComputerPlayer
@@ -18,18 +18,34 @@ public class Move {
 	    this.setCol(col);
 	}
 
+	/**
+	 * Score Getter
+	 * @return - move score
+	 */
 	public int getScore() {
 		return score;
 	}
 
+	/**
+	 * Score Setter
+	 * @param score - new score
+	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
 
+	/**
+	 * Column Getter
+	 * @return - move column
+	 */
 	public int getCol() {
 		return col;
 	}
 
+	/**
+	 * Column Setter
+	 * @param col - new column
+	 */
 	public void setCol(int col) {
 		this.col = col;
 	}

@@ -7,6 +7,7 @@ public class State {
 	private final int rows = 6;
 	private final int columns = 7;
 	private int playerTurn = 0;
+	
 	private final int verticalValue = 1;
 	private final int diagonalValue = 2;
 	private final int horizontalValue = 3;
@@ -20,6 +21,11 @@ public class State {
 		initBoard();
 	}
 
+	/**
+	 * Sets board and player turn 
+	 * @param playerToMove - new player turn
+	 * @param board        - new board
+	 */
 	public State(int playerToMove, char[][] board) {
 		this.playerTurn = playerToMove;
 		setBoard(board);
@@ -41,6 +47,7 @@ public class State {
 
 	/**
 	 * getter for rows
+	 * @return - number of rows
 	 */
 	public int getRows() {
 		return rows;
@@ -48,6 +55,7 @@ public class State {
 
 	/**
 	 * getter for columns
+	 * @return - number of columns
 	 */
 	public int getColumns() {
 		return columns;
@@ -55,7 +63,6 @@ public class State {
 
 	/**
 	 * Determines if the board is full
-	 * 
 	 * @return - true if the board is full, false otherwise
 	 */
 	public boolean isBoardFull() {
@@ -132,7 +139,7 @@ public class State {
 	}
 
 	/**
-	 * Switch player turns
+	 * Switch player turn
 	 */
 	public void switchTurn() {
 		playerTurn = (playerTurn == 0) ? 1 : 0;
@@ -157,13 +164,17 @@ public class State {
 
 	/**
 	 * Places a chip in the board
-	 * @param clickedRow - board row
-	 * @param clickedCol - board column 
+	 * @param row - board row
+	 * @param col - board column 
 	 */
-	public void move(int clickedRow, int clickedCol) {
-		board[clickedRow][clickedCol] = chip[playerTurn];
+	public void move(int row, int col) {
+		board[row][col] = chip[playerTurn];
 	}
 
+	/**
+	 * Places a chip in a specific column
+	 * @param col - column in which the chip will be placed
+	 */
 	public void move(int col) {
 		int r = board.length - 1;
 		while (r > 0 && r < rows && board[r][col] != empty) {
@@ -175,6 +186,7 @@ public class State {
 
 	/**
 	 * Getter player
+	 * @return - player array
 	 */
 	public Player[] getPlayers() {
 		return player;
@@ -182,6 +194,7 @@ public class State {
 
 	/**
 	 * Getter board
+	 * @return - board
 	 */
 	public char[][] getBoard() {
 		return board;
@@ -189,6 +202,7 @@ public class State {
 
 	/**
 	 * getter playerTurn
+	 * @return - current player turn
 	 */
 	public int getTurn() {
 		return playerTurn;
@@ -220,8 +234,8 @@ public class State {
 	}
 
 	/**
-	 * 
-	 * @param currBaord
+	 * Sets the board to an specific instance of an array
+	 * @param currBaord - new board
 	 */
 	public void setBoard(char[][] currBaord) {
 		this.board = new char[rows][columns];
@@ -234,7 +248,6 @@ public class State {
 
 	/**
 	 * Determines if a move is valid
-	 * 
 	 * @param row - row number
 	 * @param col - column number
 	 * @return - true if move is valid, false otherwise
@@ -247,8 +260,8 @@ public class State {
 	}
 
 	/**
-	 * Checks the last row in the board in order to determine if the column is
-	 * full
+	 * Checks the last row in the board in order to determine 
+	 * if the column is full
 	 * @param col - column number
 	 * @return true if the column is full, otherwise false
 	 */
@@ -259,421 +272,559 @@ public class State {
 		return true;
 	}
 
+	/**
+	 * Setter player turn
+	 * @param playerTurn - new player turn
+	 */
 	public void setTurn(int playerTurn) {
 		this.playerTurn = playerTurn;
-
 	}
 	
-	private int checkTwoInARowDiagonalLeft(char player){
-		int score = 0;
-		
-		// Check for 2 in a row diagonally
-		for (int row = rows-1; row > 2; row--) {
-			for (int col = 3; col < columns; col++) {
-				// -
-				//  -
-	   			//   X
-				//    X
-				if (board[row][col] == player && 
-					board[row-1][col-1] == player && 
-					board[row-2][col-2] == empty && 
-					board[row-3][col-3] == empty) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				// X
-				//  -
-	   			//   -
-				//    X
-				else if (board[row][col] == player && 
-						   board[row-1][col-1] == empty && 
-						   board[row-2][col-2] == empty && 
-						   board[row-3][col-3] == player) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				// X
-				//  X
-	   			//   -
-				//    -
-				else if (board[row][col] == empty && 
-						   board[row-1][col-1] == empty && 
-						   board[row-2][col-2] == player && 
-						   board[row-3][col-3] == player) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				// X
-				//  -
-	   			//   X
-				//    -
-				else if (board[row][col] == empty && 
-						   board[row-1][col-1] == player && 
-						   board[row-2][col-2] == empty && 
-						   board[row-3][col-3] == player) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				// -
-				//  X
-	   			//   -
-				//    X
-				else if (board[row][col] == player && 
-						   board[row-1][col-1] == empty && 
-						   board[row-2][col-2] == player && 
-						   board[row-3][col-3] == empty) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				// -
-				//  X
-	   			//   X
-				//    -
-				else if (board[row][col] == empty && 
-						   board[row-1][col-1] == player && 
-						   board[row-2][col-2] == player && 
-						   board[row-3][col-3] == empty) {
-					score += twoInARowValue * 2 * diagonalValue;
-				}
-			}
-		}
-		return score;
-	}
-	
-	private int checkTwoInARowDiagonalRight(char player){
-		int score = 0;
-		
-		// Check for 2 in a row diagonally
-		for (int row = rows-1; row > 2; row--) {
-			for (int col = 0; col < 4; col++) {
-				//       -
-				//     -
-	   			//   X
-				// X
-				if (board[row][col] == player && 
-					board[row-1][col+1] == player && 
-					board[row-2][col+2] == empty && 
-					board[row-3][col+3] == empty) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				//	     X
-				//     -
-				//   -
-				// X
-				else if (board[row][col] == player && 
-						   board[row-1][col+1] == empty && 
-						   board[row-2][col+2] == empty && 
-						   board[row-3][col+3] == player) {
-					score += twoInARowValue * diagonalValue;
-				}
-				//	     X
-				//     X
-				//   -
-				// -				
-				else if (board[row][row] == empty && 
-						   board[row-1][col+1] == empty && 
-						   board[row-2][col+2] == player && 
-						   board[row-3][col+3] == player) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				//	     X
-				//     -
-				//   X
-				// -				
-				else if (board[row][row] == empty && 
-						   board[row-1][col+1] == player && 
-						   board[row-2][col+2] == empty && 
-						   board[row-3][col+3] == player) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				//	     -
-				//     X
-				//   -
-				// X
-				else if (board[row][row] == player && 
-						   board[row-1][col+1] == empty && 
-						   board[row-2][col+2] == player && 
-						   board[row-3][col+3] == empty) {
-					score += twoInARowValue * diagonalValue;
-				} 
-				//	     -
-				//     X
-				//   X
-				// -				
-				else if ( board[row][row] == empty && 
-						   board[row-1][col+1] == player && 
-						   board[row-2][col+2] == player && 
-						   board[row-3][col+3] == empty) {
-					score += 2 * twoInARowValue * diagonalValue;
-				}
-			}
-		}
-		return score;
-	}
-
-	private int checkTwoInARowHorizontal(char player){
-		int score = 0;
-		
-		// Check for 2 in a row horizontally.
-		for (int row = rows-1; row >= 0; row--) {
-			for (int col = 0; col < columns-3; col++) {
-				// Check for the following pattern XX--
-				if (board[row][col] == player && 
-					board[row][col+1] == player && 
-					board[row][col+2] == empty && 
-					board[row][col+3] == empty) {
-					score += twoInARowValue * horizontalValue;
-				}
-				
-				// Check for the following pattern -XX-
-				else if (board[row][col] == empty && 
-						 board[row][col+1] == player && 
-						 board[row][col+2] == player && 
-						 board[row][col+3] == empty) {
-					// This has double he value because there is space in both sides 
-					score += 2 * twoInARowValue * horizontalValue;
-				}
-				
-				// Check for the following pattern --XX
-				else if (board[row][col] == empty && 
-						 board[row][col+1] == empty && 
-						 board[row][col+2] == player && 
-						 board[row][col+3] == player) {
-					score += twoInARowValue * horizontalValue;
-				}
-				
-				// Check for the following pattern X-X-
-				else if (board[row][col] == player && 
-						 board[row][col+1] == empty && 
-						 board[row][col+2] == player && 
-						 board[row][col+3] == empty) {
-					score += twoInARowValue * horizontalValue;
-				}
-				
-				// Check for the following pattern -X-X
-				else if (board[row][col] == empty && 
-						 board[row][col+1] == player && 
-						 board[row][col+2] == empty && 
-						 board[row][col+3] == player) {
-					score += twoInARowValue * horizontalValue;
-				}
-				
-				// Check for the following pattern X--X
-				else if (board[row][col] == player && 
-						 board[row][col+1] == empty && 
-						 board[row][col+2] == empty && 
-						 board[row][col+3] == player) {
-					score += twoInARowValue * horizontalValue;
-				}
-			}
-		}
-		return score;
-	}
-	
-	
+	/**
+	 * Calculates the heuristic of the current board.
+	 * it is used by the computer player to determine the next move
+	 * It checks for two and three in a row in a different pattern 
+	 * @see ComputerPlayer negamax
+	 * @return - board score
+	 */
 	public int getBoardScore() {
 		int score = 0;
 		char player = chip[getTurn()];
 		
-		// Check for two in a row
-		score += checkTwoInARowHorizontal(player);
-		score += checkTwoInARowVertical(player);
-		score += checkTwoInARowDiagonalRight(player);
-		score += checkTwoInARowDiagonalLeft(player);
-		
-		// check for three in a row
-		score += checkThreeInARowHorizontal(player);
-		score += checkThreeInARowVertical(player);
-		score += checkThreeInARowDiagonalRight(player);
-		score += checkThreeInARowDiagonalLeft(player);
-		score += checkThreeInARowOpenEnded(player);
-		
-		return score;
-	}
-
-	private int checkThreeInARowOpenEnded(char player) {
-		int score = 0;
-		// Check following pattern -XXX-
-		for (int row = rows-1; row > 3; row--) {
-			for (int col = 0; col < 3; col++) {
-				// horizontal
-				if (board[row][col] == empty && 
-					board[row][col+1] == player && 
-					board[row][col+2] == player && 
-					board[row][col+3] == player && 
-					board[row][col+4] == empty) {
-					score += 2 * threeInARowValue * horizontalValue;
-				}
-			}
-		}
-		
-		//    - 
-		//   X
-		//  X
-		// X
-		//-
-		for (int row = rows-1; row > 3; row--) {
-			for (int col = 4; col < columns-1; col++) {
-
-				if (board[row][col] == empty && 
-					board[row-1][col-1] == player && 
-					board[row-2][col-3] == player && 
-					board[row-3][col-3] == player && 
-					board[row-4][col-4] == empty) {
-					score += 2 * threeInARowValue * diagonalValue;
-				}
-			}
-		}
-		//- 
-		// X
-		//  X
-		//   X
-		//    -
-		for (int row = rows-1; row > 3; row--) {
-			for (int col = 0; col < 3; col++) {
-				if (board[row][col] == empty &&
-					board[row-1][col+1] == player && 
-					board[row-2][col+2] == player && 
-					board[row-3][col+3] == player && 
-					board[row-4][col+4] == empty) {
-					score += 2 * threeInARowValue * diagonalValue;
-				}
-			}
-		}
-		return score;
-	}
-
-	private int checkThreeInARowDiagonalLeft(char player) {
-		int score = 0;
-		// Check for 3 in a row diagonally
-		for (int row = rows-1; row > 2; row--) {
-			for (int col = 3; col < columns; col++) {
-				if (board[row][col] == empty && 
-					board[row-1][col-1] == player && 
-					board[row-2][col-2] == player && 
-					board[row-3][col-3] == player) {
-					score += threeInARowValue * diagonalValue;
-				} else if (board[row][col] == player && 
-						   board[row-1][col-1] == empty && 
-						   board[row-2][col-2] == player && 
-						   board[row-3][col-3] == player) {
-					score += threeInARowValue * diagonalValue;
-				} else if (board[row][col] == player && 
-					   	   board[row-1][col-1] == player && 
-					   	   board[row-2][col-2] == empty && 
-					   	   board[row-3][col-3] == player) {
-					score += threeInARowValue * diagonalValue;
-				} else if (board[row][col] == player && 
-						   board[row-1][col-1] == player && 
-						   board[row-2][col-2] == player && 
-						   board[row-3][col-3] == empty) {
-					score += threeInARowValue * diagonalValue;
-				}
-			}
-		}
-		return score;
-	}
-
-	private int checkThreeInARowDiagonalRight(char player) {
-		int score = 0;
-		// Check for 3 in a row diagonally
-		for (int row = rows-1; row > 2; row--) {
-			for (int col = 0; col < 4; col++) {
-				if (board[row][col] == player &&
-					board[row-1][col+1] == player && 
-					board[row-2][col+2] == player && 
-					board[row-3][col+3] == empty) {
-					score += threeInARowValue * diagonalValue;
-				} else if (board[row][col] == player &&
-						   board[row-1][col+1] == player && 
-						   board[row-2][col+2] == empty && 
-						   board[row-3][col+3] == player) {
-					score += threeInARowValue * diagonalValue;
-				} else if (board[row][col] == player &&
-						   board[row-1][col+1] == empty && 
-						   board[row-2][col+2] == player && 
-						   board[row-3][col+3] == player) {
-					score += threeInARowValue * diagonalValue;
-				} else if (board[row][col] == empty &&
-						   board[row-1][col+1] == player && 
-						   board[row-2][col+2] == player && 
-						   board[row-3][col+3] == player) {
-					score += threeInARowValue * diagonalValue;
-				}
-			}
-		}
-		return score;
-	}
-
-	private int checkThreeInARowVertical(char player) {
-		int score = 0;
-		// Check for the following pattern
-		// 0
-		// x
-		// x
-		// x
-		for (int row = rows-1; row > 2; row--) {
-			for (int col = 0; col < columns; col++) {
-				if (board[row][col] == player &&
-					board[row-1][col] == player && 
-					board[row-2][col] == player && 
-					board[row-3][col] == empty) {
-					score += threeInARowValue * verticalValue;
-				}
-			}
-		}
-		return score;
-	}
-
-	private int checkThreeInARowHorizontal(char player) {
-		int score = 0;
-		// Check for horizontal 3-in-a-row.
 		for (int row = rows-1; row >= 0; row--) {
-			for (int col = 0; col < 4; col++) {
-				// XX-X
-				if (board[row][col] == player && 
-					board[row][col+1] == player && 
-					board[row][col+2] == empty && 
-					board[row][col+3] == player) {
-					score += threeInARowValue * horizontalValue;
+			for (int col = 0; col < columns; col++) {
+				
+				if(row > 1){ 
+					score += checkTwoInARowVertical(player, row, col);
 				}
-				// X-XX
-				else if (board[row][col] == player && 
-						 board[row][col+1] == empty && 
-						 board[row][col+2] == player && 
-						 board[row][col+3] == player) {
-					score += threeInARowValue * horizontalValue;
+				
+				if (row > 2){ 
+					score += checkThreeInARowVertical(player, row, col);
+					if(col < 4){
+						score += checkTwoInARowDiagonalRight(player, row, col);
+						score += checkThreeInARowDiagonalRight(player, row, col);
+					}
+					else if(col > 2){
+						score += checkTwoInARowDiagonalLeft(player, row, col);
+						score += checkThreeInARowDiagonalLeft(player, row, col);
+					}
 				}
-				// -XXX
-				else if (board[row][col] == empty && 
-						 board[row][col+1] == player && 
-						 board[row][col+2] == player && 
-						 board[row][col+3] == player) {
-					score += threeInARowValue * horizontalValue;
+				
+				if(row > 3){
+					if(col < 3){
+						 checkThreeInARowOpenEndedHorizontal(player, row, col);
+						 checkThreeInARowOpenEndedDiagonalLeft(player, row, col);
+					}
+					else if(col > 3){
+						checkThreeInARowOpenEndedDiagonalRight(player, row, col);
+					}
 				}
-				// XXX-
-				else if (board[row][col] == player && 
-						 board[row][col+1] == player && 
-						 board[row][col+2] == player && 
-						 board[row][col+3] == empty) {
-					score += threeInARowValue * horizontalValue;
+				
+				if(col < 4){ 
+					score += checkTwoInARowHorizontal(player, row, col);
+					score += checkThreeInARowHorizontal(player, row, col);
 				}
 			}
 		}
-		return score;		
+		
+		return score;
 	}
 
-	private int checkTwoInARowVertical(char player) {
+	/**
+	 * Scores the horizontal two in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkTwoInARowHorizontal(char player, int row, int col){
+		int score = 0;
+		
+		// Check for the following pattern XX--
+		if (board[row][col] == player && 
+			board[row][col+1] == player && 
+			board[row][col+2] == empty && 
+			board[row][col+3] == empty) {
+			score += twoInARowValue * horizontalValue;
+		}
+		
+		// Check for the following pattern -XX-
+		else if (board[row][col] == empty && 
+				 board[row][col+1] == player && 
+				 board[row][col+2] == player && 
+				 board[row][col+3] == empty) {
+			// This has double he value because there is space in both sides 
+			score += 2 * twoInARowValue * horizontalValue;
+		}
+		
+		// Check for the following pattern --XX
+		else if (board[row][col] == empty && 
+				 board[row][col+1] == empty && 
+				 board[row][col+2] == player && 
+				 board[row][col+3] == player) {
+			score += twoInARowValue * horizontalValue;
+		}
+		
+		// Check for the following pattern X-X-
+		else if (board[row][col] == player && 
+				 board[row][col+1] == empty && 
+				 board[row][col+2] == player && 
+				 board[row][col+3] == empty) {
+			score += twoInARowValue * horizontalValue;
+		}
+		
+		// Check for the following pattern -X-X
+		else if (board[row][col] == empty && 
+				 board[row][col+1] == player && 
+				 board[row][col+2] == empty && 
+				 board[row][col+3] == player) {
+			score += twoInARowValue * horizontalValue;
+		}
+		
+		// Check for the following pattern X--X
+		else if (board[row][col] == player && 
+				 board[row][col+1] == empty && 
+				 board[row][col+2] == empty && 
+				 board[row][col+3] == player) {
+			score += twoInARowValue * horizontalValue;
+		}
+		
+		return score;
+	}
+	
+	/**
+	 * Scores the vertical two in a row patterns 
+	 * @param player - player chip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkTwoInARowVertical(char player, int row, int col) {
 		int score = 0;
 		
 		// Check for the following pattern 
 		// -
 		// X
 		// X
-		for (int row = rows-1; row > 1; row--) {
-			for (int col = 0; col < columns; col++) {
-				if (board[row][col] == player && 
-					board[row-1][col] == player && 
-					board[row-2][col] == empty) {
-					score += twoInARowValue * verticalValue;
-				}
-			}
+		if (board[row][col] == player && 
+			board[row-1][col] == player && 
+			board[row-2][col] == empty) {
+			score += twoInARowValue * verticalValue;
 		}
+		
+		return score;
+	}
+	
+	/**
+	 * Scores the right diagonal two in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkTwoInARowDiagonalRight(char player, int row, int col){
+		int score = 0;
+		
+		//    -
+		//   -
+		//  X
+		// X
+		if (board[row][col] == player && 
+			board[row-1][col+1] == player && 
+			board[row-2][col+2] == empty && 
+			board[row-3][col+3] == empty) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		//	  X
+		//   -
+		//  -
+		// X
+		else if (board[row][col] == player && 
+				   board[row-1][col+1] == empty && 
+				   board[row-2][col+2] == empty && 
+				   board[row-3][col+3] == player) {
+			score += twoInARowValue * diagonalValue;
+		}
+		
+		//	  X
+		//   X
+		//  -
+		// -				
+		else if (board[row][row] == empty && 
+				   board[row-1][col+1] == empty && 
+				   board[row-2][col+2] == player && 
+				   board[row-3][col+3] == player) {
+			score += twoInARowValue * diagonalValue;
+		}
+		
+		//	  X
+		//   -
+		//  X
+		// -				
+		else if (board[row][row] == empty && 
+				   board[row-1][col+1] == player && 
+				   board[row-2][col+2] == empty && 
+				   board[row-3][col+3] == player) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		//	  -
+		//   X
+		//  -
+		// X
+		else if (board[row][row] == player && 
+				   board[row-1][col+1] == empty && 
+				   board[row-2][col+2] == player && 
+				   board[row-3][col+3] == empty) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		//	  -
+		//   X
+		//  X
+		// -				
+		else if ( board[row][row] == empty && 
+				   board[row-1][col+1] == player && 
+				   board[row-2][col+2] == player && 
+				   board[row-3][col+3] == empty) {
+			score += 2 * twoInARowValue * diagonalValue;
+		}
+
+		return score;
+	}
+	
+	/**
+	 * Scores the left diagonal two in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkTwoInARowDiagonalLeft(char player, int row, int col){
+		int score = 0;
+	
+		// -
+		//  -
+		//   X
+		//    X
+		if (board[row][col] == player && 
+			board[row-1][col-1] == player && 
+			board[row-2][col-2] == empty && 
+			board[row-3][col-3] == empty) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		// X
+		//  -
+		//   -
+		//    X
+		else if (board[row][col] == player && 
+				   board[row-1][col-1] == empty && 
+				   board[row-2][col-2] == empty && 
+				   board[row-3][col-3] == player) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		// X
+		//  X
+		//   -
+		//    -
+		else if (board[row][col] == empty && 
+				   board[row-1][col-1] == empty && 
+				   board[row-2][col-2] == player && 
+				   board[row-3][col-3] == player) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		// X
+		//  -
+		//   X
+		//    -
+		else if (board[row][col] == empty && 
+				   board[row-1][col-1] == player && 
+				   board[row-2][col-2] == empty && 
+				   board[row-3][col-3] == player) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		// -
+		//  X
+		//   -
+		//    X
+		else if (board[row][col] == player && 
+				   board[row-1][col-1] == empty && 
+				   board[row-2][col-2] == player && 
+				   board[row-3][col-3] == empty) {
+			score += twoInARowValue * diagonalValue;
+		} 
+		
+		// -
+		//  X
+		//   X
+		//    -
+		else if (board[row][col] == empty && 
+				   board[row-1][col-1] == player && 
+				   board[row-2][col-2] == player && 
+				   board[row-3][col-3] == empty) {
+			score += twoInARowValue * 2 * diagonalValue;
+		}
+	
+		return score;
+	}
+	
+	/**
+	 * Scores the horizontal three in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowHorizontal(char player, int row, int col) {
+		int score = 0;
+	
+		// XX-X
+		if (board[row][col] == player && 
+			board[row][col+1] == player && 
+			board[row][col+2] == empty && 
+			board[row][col+3] == player) {
+			score += threeInARowValue * horizontalValue;
+		}
+		
+		// X-XX
+		else if (board[row][col] == player && 
+				 board[row][col+1] == empty && 
+				 board[row][col+2] == player && 
+				 board[row][col+3] == player) {
+			score += threeInARowValue * horizontalValue;
+		}
+		
+		// -XXX
+		else if (board[row][col] == empty && 
+				 board[row][col+1] == player && 
+				 board[row][col+2] == player && 
+				 board[row][col+3] == player) {
+			score += threeInARowValue * horizontalValue;
+		}
+		
+		// XXX-
+		else if (board[row][col] == player && 
+				 board[row][col+1] == player && 
+				 board[row][col+2] == player && 
+				 board[row][col+3] == empty) {
+			score += threeInARowValue * horizontalValue;
+		}
+			
+		return score;		
+	}
+	
+	/**
+	 * Scores the vertical three in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowVertical(char player, int row, int col) {
+		int score = 0;
+		
+		// Check for the following pattern
+		// 0
+		// x
+		// x
+		// x
+		if (board[row][col] == player &&
+			board[row-1][col] == player && 
+			board[row-2][col] == player && 
+			board[row-3][col] == empty) {
+			score += threeInARowValue * verticalValue;
+		}
+
+		return score;
+	}
+	
+	/**
+	 * Scores the left diagonal three in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowDiagonalLeft(char player, int row, int col) {
+		int score = 0;
+		
+		//X
+		// X
+		//  X
+		//   -
+		if (board[row][col] == empty && 
+			board[row-1][col-1] == player && 
+			board[row-2][col-2] == player && 
+			board[row-3][col-3] == player) {
+			score += threeInARowValue * diagonalValue;
+		} 
+		
+		//X
+		// X
+		//  -
+		//   X
+		else if (board[row][col] == player && 
+				   board[row-1][col-1] == empty && 
+				   board[row-2][col-2] == player && 
+				   board[row-3][col-3] == player) {
+			score += threeInARowValue * diagonalValue;
+		}
+		//X
+		// -
+		//	X
+		//   X
+		else if (board[row][col] == player && 
+			   	   board[row-1][col-1] == player && 
+			   	   board[row-2][col-2] == empty && 
+			   	   board[row-3][col-3] == player) {
+			score += threeInARowValue * diagonalValue;
+		} 
+		
+		//-
+		// X
+		//  X
+		//   X
+		else if (board[row][col] == player && 
+				   board[row-1][col-1] == player && 
+				   board[row-2][col-2] == player && 
+				   board[row-3][col-3] == empty) {
+			score += threeInARowValue * diagonalValue;
+		}
+
+		return score;
+	}
+
+	/**
+	 * Scores the right diagonal three in a row patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowDiagonalRight(char player, int row, int col) {
+		int score = 0;
+		
+		//    -
+		//   X
+		//  X
+		// X
+		if (board[row][col] == player &&
+			board[row-1][col+1] == player && 
+			board[row-2][col+2] == player && 
+			board[row-3][col+3] == empty) {
+			score += threeInARowValue * diagonalValue;
+		} 
+		//    X
+		//   -
+		//  X
+		// X
+		else if (board[row][col] == player &&
+				   board[row-1][col+1] == player && 
+				   board[row-2][col+2] == empty && 
+				   board[row-3][col+3] == player) {
+			score += threeInARowValue * diagonalValue;
+		} 
+		
+		//    X
+		//   X
+		//  -
+		// X
+		else if (board[row][col] == player &&
+				   board[row-1][col+1] == empty && 
+				   board[row-2][col+2] == player && 
+				   board[row-3][col+3] == player) {
+			score += threeInARowValue * diagonalValue;
+		} 
+		
+		//    X
+		//   X
+		//  X
+		// -
+		else if (board[row][col] == empty &&
+				   board[row-1][col+1] == player && 
+				   board[row-2][col+2] == player && 
+				   board[row-3][col+3] == player) {
+			score += threeInARowValue * diagonalValue;
+		}
+		
+		return score;
+	}
+	
+	/**
+	 * Scores the horizontal open ended patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowOpenEndedHorizontal(char player, int row, int col){
+		int score = 0;
+		// Check following pattern -XXX-
+		if (board[row][col] == empty && 
+			board[row][col+1] == player && 
+			board[row][col+2] == player && 
+			board[row][col+3] == player && 
+			board[row][col+4] == empty) {
+			score += 2 * threeInARowValue * horizontalValue;
+		}
+		
+		return score;
+	}
+	
+	/**
+	 * Scores the right diagonal open ended patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowOpenEndedDiagonalRight(char player, int row, int col){
+		int score = 0;
+		
+		//	   - 
+		//   X
+		//  X
+		// X
+		//-
+		if (board[row][col] == empty && 
+			board[row-1][col-1] == player && 
+			board[row-2][col-3] == player && 
+			board[row-3][col-3] == player && 
+			board[row-4][col-4] == empty) {
+			score += 2 * threeInARowValue * diagonalValue;
+		}
+
+		return score;
+	}
+	
+	/**
+	 * Scores the left diagonal open ended patterns 
+	 * @param player - playerChip
+	 * @param row    - board row
+	 * @param col    - board column
+	 * @return - board score
+	 */
+	private int checkThreeInARowOpenEndedDiagonalLeft(char player, int row, int col) {
+		int score = 0;
+		
+		//- 
+		// X
+		//  X
+		//   X
+		//    -
+		if (board[row][col] == empty &&
+			board[row-1][col+1] == player && 
+			board[row-2][col+2] == player && 
+			board[row-3][col+3] == player && 
+			board[row-4][col+4] == empty) {
+			score += 2 * threeInARowValue * diagonalValue;
+		}
+			
 		return score;
 	}
 }

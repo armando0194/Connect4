@@ -14,6 +14,11 @@ class MenuListener implements ActionListener{
 	private View gameView;
 	private State gameState;
 	
+	/**
+	 * Constructor
+	 * @param gameView  - current game view
+	 * @param gameState - current game state
+	 */
 	public MenuListener(View gameView, State gameState){
 		this.gameView = gameView;
 		this.gameState = gameState;
@@ -52,7 +57,9 @@ class MenuListener implements ActionListener{
 	}	
 	
 	/**
-	 * Creates a JPanel that will be display inside an JOptionPanel
+	 * Creates a JPanel that will be display inside an JOptionPanel. 
+	 * The JPanel contains all the options needed to start a new game
+	 * @return - menu inside a JPanel
 	 */
 	private JPanel getPanel()
     {
@@ -91,7 +98,10 @@ class MenuListener implements ActionListener{
         return basePanel;
     }
 	
-	public void newGamesSettings(){
+	/**
+	 * Creates a JOptionPane that asks the user if the want to start a new game
+	 */
+	private void newGamesSettings(){
 		int selection = JOptionPane.showConfirmDialog(null, getPanel(), "Settings : ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if(selection == JOptionPane.OK_OPTION){
 			gameView.generateBoard();
@@ -100,11 +110,14 @@ class MenuListener implements ActionListener{
 			setNewGame();
 		}
 		else if(selection == JOptionPane.CANCEL_OPTION){
-			System.out.println("Canceled"); //test
+			System.out.println("Canceled"); 
 		}	
 	}
 	
-	public void setNewGame(){
+	/**
+	 * It creates players, sets new board and sets new difficulty
+	 */
+	private void setNewGame(){
 		int numOfPlayers = Integer.parseInt( (String)gameView.getPlayerDropDown().getSelectedItem() );
 		boolean computerFirst = gameView.getFirstTurnDropDown().getSelectedItem().equals("Computer") ? true : false;
 		String difficultySelected = gameView.getDifficultyDropDown().getSelectedItem().toString();
