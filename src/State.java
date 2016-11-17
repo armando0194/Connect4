@@ -1,5 +1,9 @@
 import javax.swing.JTextField;
-
+/**
+ * 
+ * @author DannerJese
+ *
+ */
 public class State {
 	private final char empty = '-';
 	private final char[] chip = { 'X', 'O' };
