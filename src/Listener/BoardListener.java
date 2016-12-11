@@ -58,11 +58,10 @@ public class BoardListener implements ActionListener {
 		// Disable the slot clicked and enable button above
 		gameState.printBoard();
 		System.out.println(clickedRow + " " + clickedCol);
-		boardButton[clickedRow][clickedCol].setDisabledIcon(yellowChip);
+		//boardButton[clickedRow][clickedCol].setDisabledIcon(yellowChip);
 		boardButton[clickedRow][clickedCol].setEnabled(false);
 		gameState.move(clickedRow, clickedCol);
 		enableButtonAbove(clickedRow, clickedCol);
-		paintChip();
 		
 		//if there is a winner, disable board and report winner
 		if(gameState.checkWinner()){
@@ -81,6 +80,7 @@ public class BoardListener implements ActionListener {
 				computerMakeMove();
 			}
 		}
+		paintChip();
 		reportTurn();
 		gameState.printBoard();
 	}
@@ -92,8 +92,8 @@ public class BoardListener implements ActionListener {
 		ComputerPlayer computerPlayer = (ComputerPlayer)gameState.getPlayer(1);
 		int col = computerPlayer.getMove(gameState);
 		int row = getEmptyRow(col);	
-		System.out.println("best"+col);
 		
+		//Disable buton and add color
 		boardButton[row][col].setDisabledIcon(redChip);
 		boardButton[row][col].setEnabled(false);
 		gameState.move(row, col);

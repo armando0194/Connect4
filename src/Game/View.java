@@ -62,6 +62,10 @@ public class View {
 	private Icon redChip = new ImageIcon("src\\images\\Red.png"); 
 	private Icon yellowChip = new ImageIcon("src\\images\\Yellow.png");
 	
+	/**
+	 * Sets the current state, game state and generates game frames
+	 * @param gameState
+	 */
 	public View( State gameState) {
 		currLayoutCard = "Start Game";
 		this.gameState = gameState;
@@ -141,8 +145,23 @@ public class View {
 		
 	}
 
+	/**
+	 * Generates a JPanel that displays the connect4's rules
+	 */
 	public void generateRulesPanel() {
+		String rules = "<html> <br /><br /><br /><br /><br /><br /><h3>Rules</h3> <br />" + "<p>" +
+					   "1. Decide who plays first. Players will alternate turns after placing a checker <br />" +
+					   "2. On your turn, place one checker in any of the avalable slots <br />" +
+					   "3. Play alternates until one gets four checkers of his or her color in a row. <br />The four in a row can be horizaontal, vertical or diagonal </p></html>";
+		JPanel rulesPanel = new JPanel();
+		JLabel rulesLabel = new JLabel(rules);
+		JButton backStart = new JButton("Back");
+		MenuListener backListener = new MenuListener(this, gameState);
+	    backStart.addActionListener(backListener);
 		
+	    rulesPanel.add(rulesLabel);
+	    rulesPanel.add(backStart);
+		currentPanel.add(rulesPanel, "Rules");  
 	}
 
 	/**
@@ -179,10 +198,8 @@ public class View {
 		
 		boardPanel.add(turnLabel);
 		boardPanel.add(playerTurn);
-		//boardPanel.setBackground(Color.BLUE);
 		boardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
 		currentPanel.add(boardPanel, "Board");
-		//gameFrame.add(boardPanel, BorderLayout.CENTER);
 	}
 
 	/**
