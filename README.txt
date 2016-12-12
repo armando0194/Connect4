@@ -1,7 +1,8 @@
 Assigment 5: Connect4
 
-The project was developed using eclipse neon, 
-so that is the only requisite to run.
+To run:
+    - open project in eclipse 
+    - run Connect4Game.java
 
 This project contains the following files:
    
