@@ -29,7 +29,6 @@ import javax.swing.JTextField;
  * This class handles the game graphical user interface. 
  * It instantiates the game frame and its corresponding components.
  * @author  Manuel Hernandez
- * @author  Danner Pacheco
  */
 public class View {
 

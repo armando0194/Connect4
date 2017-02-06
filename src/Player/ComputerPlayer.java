@@ -7,7 +7,6 @@ import java.util.Random;
  * This class is a representation of a computer player. Its main 
  * function is to generate computer moves
  * @author Manuel Hernandez
- * @author Danner Pacheco
  */
 public class ComputerPlayer extends Player {
 	final private int maxValue = 1000000, minValue = -1000000;

@@ -16,7 +16,6 @@ import javax.swing.JPanel;
  *  slot was clicked and manipulates the 
  *  board accordingly.
  *  @author Manuel Hernandez
- *  @author Danner Pacheco
 */
 public class BoardListener implements ActionListener {
 	private int clickedRow; 

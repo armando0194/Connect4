@@ -6,7 +6,6 @@ package Player;
  * @see ComputerPlayer
  * @see HumanPlayer
  * @author Manuel Hernandez
- * @author Danner Pacheco
  */
 public class Player {
 	private String username;

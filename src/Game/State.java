@@ -10,7 +10,6 @@ import Player.HumanPlayer;
  * the current state of the game such as get winner, iniatiate board, get player turn,
  * check if board is full, etc.
  * @author  Manuel Hernandez
- * @author  Danner Pacheco
  */
 public class State {
 	private final char empty = '-';

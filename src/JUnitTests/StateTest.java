@@ -13,7 +13,6 @@ import org.junit.Test;
  * JUnit class created to test {@link State} class
  * @see ComputerPlayer
  * @author Manuel Hernandez
- * @author Danner Pacheco
  */
 public class StateTest {
 	State gameState;

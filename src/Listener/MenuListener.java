@@ -17,7 +17,6 @@ import javax.swing.JPanel;
  * It gets the parameters needed to start a new game. Also, it manipulates
  * the cardlayout 
  * @author Manuel Hernandez
- * @author Danner Pacheco
  */
 public class MenuListener implements ActionListener{
 	
